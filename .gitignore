@@ -1,0 +1,17 @@
+Benchmark_Problems
+TestFiles
+at_astar
+brfs
+pr2plan
+pr2plan_complex
+siw-then-bfsf
+wa-planner
+*.pddl
+venv
+__pycache__
+*.xml
+*.stats
+.idea
+*.details
+*.obs
+*.optimal
