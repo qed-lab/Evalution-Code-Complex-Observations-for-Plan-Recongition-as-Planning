@@ -13,14 +13,14 @@ class unordered_group:
     def __len__(self):
         return sum(len(memb) for memb in self.members)
     def without_fl_obs(self):
-        group = unordered_group(list(filter(lambda mem: mem.without_fl_obs() is not None, self.members)))
+        group = unordered_group(list(filter(lambda mem: mem is not None, [mem.without_fl_obs() for mem in self.members])))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
             return group.members[0]
         return group
     def without_option_groups(self):
-        group = unordered_group(list(filter(lambda mem: mem.without_option_groups() is not None, self.members)))
+        group = unordered_group(list(filter(lambda mem: mem is not None, [mem.without_option_groups() for mem in self.members])))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
@@ -28,6 +28,11 @@ class unordered_group:
         return group
     def without_unordered_groups(self):
         return None
+
+    def reduce_unordered_groups(self):
+        the_one = random.sample(self.members, 1)[0]
+        the_one = the_one.reduce_unordered_groups()
+        return the_one
 
 class option_group:
     def __init__(self, members):
@@ -37,7 +42,7 @@ class option_group:
     def __len__(self):
         return 1
     def without_fl_obs(self):
-        group = option_group(list(filter(lambda mem: mem.without_fl_obs() is not None, self.members)))
+        group = option_group(list(filter(lambda mem: mem is not None, [mem.without_fl_obs() for mem in self.members])))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
@@ -45,13 +50,23 @@ class option_group:
         return group
     def without_option_groups(self):
         return None
+
     def without_unordered_groups(self):
-        group = option_group(list(filter(lambda mem: mem.without_unordered_groups() is not None, self.members)))
+        group = option_group(list(filter(lambda mem: mem is not None, [mem.without_unordered_groups() for mem in self.members])))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
             return group.members[0]
         return group
+
+    def reduce_unordered_groups(self):
+        group = option_group(list(mem.reduce_unordered_groups() for mem in self.members))
+        if len(group.members) == 0:
+            return None
+        if len(group.members) == 1:
+            return group.members[0]
+        return group
+
 
 class ordered_group:
     def __init__(self, members):
@@ -61,7 +76,7 @@ class ordered_group:
     def __len__(self):
         return sum(len(memb) for memb in self.members)
     def without_fl_obs(self):
-        group = ordered_group(list(filter(lambda mem: mem.without_fl_obs() is not None, self.members)))
+        group = ordered_group(list(filter(lambda mem: mem is not None, [mem.without_fl_obs() for mem in self.members])))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
@@ -69,14 +84,21 @@ class ordered_group:
         return group
 
     def without_option_groups(self):
-        group = ordered_group(list(filter(lambda mem: mem.without_option_groups() is not None, self.members)))
+        group = ordered_group(list(filter(lambda mem: mem is not None, [mem.without_option_groups() for mem in self.members])))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
             return group.members[0]
         return group
     def without_unordered_groups(self):
-        group = ordered_group(list(filter(lambda mem: mem.without_unordered_groups() is not None, self.members)))
+        group = ordered_group(list(filter(lambda mem: mem is not None, [mem.without_unordered_groups() for mem in self.members])))
+        if len(group.members) == 0:
+            return None
+        if len(group.members) == 1:
+            return group.members[0]
+        return group
+    def reduce_unordered_groups(self):
+        group = ordered_group(list(mem.reduce_unordered_groups() for mem in self.members))
         if len(group.members) == 0:
             return None
         if len(group.members) == 1:
@@ -99,6 +121,8 @@ class action_observation:
             return None
     def without_unordered_groups(self):
         return self
+    def reduce_unordered_groups(self):
+        return self
 
 class fluent_observation:
     def __init__(self, fluents):
@@ -113,6 +137,8 @@ class fluent_observation:
     def without_option_groups(self):
         return self
     def without_unordered_groups(self):
+        return self
+    def reduce_unordered_groups(self):
         return self
 
 
@@ -141,20 +167,30 @@ def read_trace(trace_filename):
     return trace
 
 
-def count_obs_from_file(filename):
-    return len(read_complex_obs(filename))
+def count_obs_from_file(filename, version):
+    if version == "complex":
+        return len(read_complex_obs(filename))
+    elif version == "ignore" or version == "simple":
+        return len(read_simple_obs(filename))
+
+
+def read_simple_obs(filename):
+
+    with open(filename, 'r') as file:
+        membs = []
+        for line in file:
+            line = line.strip(" \n()\t")
+            if len(line) != 0:
+                membs.append(action_observation(line))
+        return ordered_group(membs)
+
 
 def read_complex_obs(filename):
 
     with open(filename, 'r') as file:
         observations = file.read()
         print(observations)
-        # if observations.strip()[0] != '[': # list is assumed if not present. Accounts for pr2plan-style observation files
-        #     begin = "["
-        # if observations.strip()[-1] != ']':
-        #     end = "]"
-        # print(begin + observations + end)
-        return parse_complex_obs("["+ observations + "]")
+        return parse_complex_obs(observations)
 
 def parse_complex_obs(observation_string):
     if len(observation_string) == 0:
@@ -261,10 +297,40 @@ def write_ignore_all_uncertainty_to_file(obs_group, file):
                 out.write(str(obs) + "\n")
         elif isinstance(obs_group, action_observation):
             out.write(str(obs_group))
+        else:
+            print("Not-simplified observation found in supposedly simplified group.")
+            exit(1)
 
     return obs_group
 
+def write_ignore_most_uncertainty_to_file(obs_group, file):
+    if not isinstance(obs_group, ordered_group):
+        print("Tried to write a not ordered group to file for previous work eval.")
+        exit(1)
 
+    obs_group = obs_group.without_fl_obs()
+    if obs_group is not None:
+        obs_group = obs_group.without_option_groups()
+    if obs_group is not None:
+        obs_group = obs_group.reduce_unordered_groups()
+
+    if obs_group is None:
+        return obs_group
+
+    with open(file, 'w') as out:
+        if isinstance(obs_group, ordered_group):
+            for obs in obs_group.members:
+                if not isinstance(obs, action_observation):
+                    print("Non-action observation found in supposedly simplified ordered group.")
+                    exit(1)
+                out.write(str(obs) + "\n")
+        elif isinstance(obs_group, action_observation):
+            out.write(str(obs_group))
+        else:
+            print("Not-simplified observation found in supposedly simplified group.")
+            exit(1)
+
+    return obs_group
 
 def obscure_AF(steps, states, observed_perc, unordered_perc, garble_perc, fluent_visibility):
 
@@ -569,7 +635,7 @@ if __name__ == '__main__':
 
     # print(str(read_complex_obs("")))
 
-    # exit(1)
+    exit(1)
 
 
 
