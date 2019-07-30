@@ -109,7 +109,7 @@ class action_observation:
     def __init__(self, action): # set of strings
         self.action = action
     def __str__(self):
-        return "(" + " ".join(self.action) + ")"
+        return "(" + self.action + ")"
     def __len__(self):
         return 1
     def without_fl_obs(self):
@@ -180,10 +180,12 @@ def read_simple_obs(filename):
         membs = []
         for line in file:
             line = line.strip(" \n()\t")
+            print(line)
             if len(line) != 0:
                 membs.append(action_observation(line))
-        return ordered_group(membs)
-
+        ret = ordered_group(membs)
+        print(ret)
+        return ret
 
 def read_complex_obs(filename):
 
