@@ -6,6 +6,9 @@ pr2plan
 pr2plan_complex
 siw-then-bfsf
 wa-planner
+planner
+*.o
+*.sconsign.dblite
 *.pddl
 venv
 __pycache__
