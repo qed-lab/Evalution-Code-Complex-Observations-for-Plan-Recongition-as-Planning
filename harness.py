@@ -48,7 +48,7 @@ class Results:
 
 def write_object_to_file(object, filename):
     with open(filename, 'wb') as file:
-        pickle.dump(result_library)
+        pickle.dump(object, file)
 def get_object_from_file(filename):
     with open(filename, 'rb') as file:
         return pickle.load(file)
@@ -333,10 +333,10 @@ def print_extracted_results(num_results, avg_obs_sizes, avg_times, avg_correctne
     outstream.write("\n||   O   |   U   |   B   ||")
     for version in versions:
         outstream.write("           A           |           AF          ||")
-    outstream.write("||       |       |       ||")
+    outstream.write("\n||       |       |       ||")
     for version in versions:
         outstream.write("   O   :   C   :   G   |   O   :   C   :   G   ||")
-
+    outstream.write("\n")
     for observed_perc in obs_percs:
         for unordered_perc in unord_percs:
             for garble_perc in garble_percs:
@@ -386,7 +386,8 @@ def print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_cor
     outstream.write("\n&  &  ")
     for version in versions:
         outstream.write(r"& $|O'|$ & $|\G_T^*|$ & $|O'|$ & $|\G_T^*|$ ")
-    outstream.write(r"\\ \hline")
+    outstream.write(r"\\ \hline" + "\n")
+
 
     # """\multirow{6}{*}{100} & \multirow{2}{*}{0} & 0 & 1* & 00 & .00 & 00 & 1* & 00 & .00 & 00 & 00 & .00 & 00 & 00 & .00 & 00 & 00 & 00 & 00 & 00 \\ \cline{3-21} """
     always_correct = True
@@ -468,26 +469,33 @@ if __name__ == '__main__':
     # num_hyps = 1
 
     ## 3 settings averaging over 6
-    # obs_percs = (1.0, .5, .25)
-    # unord_percs = (.5,)
-    # garble_percs = (.25,)
-    # obs_per_setting = 2
-    # num_hyps = 3
-
-    ## 2 settings averaging over 3
-    obs_percs = (.5, .25)
+    obs_percs = (1.0, .5, .25)
     unord_percs = (.5,)
     garble_percs = (.25,)
-    obs_per_setting = 3
-    num_hyps = 1
+    obs_per_setting = 2
+    num_hyps = 3
+
+    ## 2 settings averaging over 3
+    # obs_percs = (.5, .25)
+    # unord_percs = (.5,)
+    # garble_percs = (.25,)
+    # obs_per_setting = 3
+    # num_hyps = 1
 
     result_library = evaluate_problem("Benchmark_Problems/block-words", "block-words_p01", obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs,obs_per_setting=obs_per_setting, num_hyps=num_hyps)
-
-    write_object_to_file(result_library, "TestFiles/results_temp")
 
     for r in result_library.values():
         print(r)
 
+    write_object_to_file(result_library, "TestFiles/hour_results_temp")
+
+
+    num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time = extract_results(result_library)
+    print_extracted_results(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time, obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs)
+    print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time, obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs)
+
+    result_library = get_object_from_file("TestFiles/hour_results_temp")
+    print("\nRead from file:")
     num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time = extract_results(result_library)
     print_extracted_results(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time, obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs)
     print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time, obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs)
