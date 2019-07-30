@@ -4,6 +4,7 @@ import os
 from collections import defaultdict
 import time as TIMER
 from sys import stdout
+import pickle
 
 DEVNULL = " > /dev/null"
 # DEVNULL = " "
@@ -45,14 +46,21 @@ class Results:
                            "\t {was_or_not} correct.".format(ind_size=len(self.indicated), **locals(), was_or_not="Was" if self.is_correct else "Wasn't")
         return identifiers + "\n"
 
-def run_wa_planner(domain, problem, output_file='execution.details', trace_file=os.devnull , timeout_seconds=None, bound=None):
+def write_object_to_file(object, filename):
+    with open(filename, 'wb') as file:
+        pickle.dump(result_library)
+def get_object_from_file(filename):
+    with open(filename, 'rb') as file:
+        return pickle.load(file)
+
+def run_planner(domain, problem, output_file='execution.details', trace_file=os.devnull, timeout_seconds=None, bound=None):
 
     if not os.path.exists(domain):
         print("Domain file <" + domain + "> does not exist.")
     if not os.path.exists(problem):
         print("Problem file <" + problem + "> does not exist.")
 
-    cmd = "./wa-planner --domain {} --problem {} --output {} --trace_output {} ".format(domain, problem, output_file, trace_file)
+    cmd = "./planner --domain {} --problem {} --output {} --trace_output {} ".format(domain, problem, output_file, trace_file)
     if timeout_seconds is not None:
         cmd += " --time {} ".format(timeout_seconds)
     if bound is not None:
@@ -74,12 +82,17 @@ def write_observations(folder, problemname, result_library=None, obs_per_setting
     basename = folder+"/"+problemname+"/"
 
     complex_folder = basename +"complex_observations/"
-    ignore_complex_folder = basename +"simple_version_observations/"
-    ordered_folder = basename +"ordered_versions_of_observations/"
+    ignore_complex_folder = basename +"ignore_observations/"
+    ignore_most_complex_folder = basename +"simple_observations/"
+    ordered_folder = basename +"order_observations/"
 
     # Make diretories if needed:
     try:
         os.makedirs(complex_folder)
+    except FileExistsError:
+        pass
+    try:
+        os.makedirs(ignore_most_complex_folder)
     except FileExistsError:
         pass
     try:
@@ -115,7 +128,7 @@ def write_observations(folder, problemname, result_library=None, obs_per_setting
         for true_hyp in range(len(hyps)):
             fill_template_pddl(template_f, tempfile, hyps[true_hyp])
             print("Finding optimal plan for unconstrained problem {problemname} (true hyp is {true_hyp})".format(**locals()))
-            run_wa_planner(domain_f,tempfile, optimal_plan_details, optimal_plan_trace )
+            run_planner(domain_f, tempfile, optimal_plan_details, optimal_plan_trace)
 
             for observed_perc in obs_percs:
                 for unordered_perc in unord_percs:
@@ -134,62 +147,45 @@ def write_observations(folder, problemname, result_library=None, obs_per_setting
                             # Mark the size of each observation into a library, which will eventually hold the results
 
                             num_obs = len(observations) if observations is not None else 0
-                            result_seed = Results(problemname,true_hyp,mode,"complex",observed_perc,unordered_perc,garble_perc,idx,num_obs)
-                            result_library["{problemname}_hyp{true_hyp}_complex_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}".format(**locals())] = result_seed
+                            # result_seed = Results(problemname,true_hyp,mode,"complex",observed_perc,unordered_perc,garble_perc,idx,num_obs)
+                            # result_library["{problemname}_hyp{true_hyp}_complex_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}".format(**locals())] = result_seed
 
-                            simple_ignore_obs = obscure_blind.write_ignore_all_uncertainty_to_file(observations, ignore_complex_folder + obs_f)
-                            num_obs = len(simple_ignore_obs) if simple_ignore_obs is not None else 0
-                            result_seed = Results(problemname,true_hyp,mode,"ignore",observed_perc,unordered_perc,garble_perc,idx,num_obs)
-                            result_library["{problemname}_hyp{true_hyp}_ignore_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}".format(**locals())] = result_seed
+                            ignore_obs = obscure_blind.write_ignore_all_uncertainty_to_file(observations, ignore_complex_folder + obs_f)
+                            # num_obs = len(ignore_obs) if ignore_obs is not None else 0
+                            # result_seed = Results(problemname,true_hyp,mode,"ignore",observed_perc,unordered_perc,garble_perc,idx,num_obs)
+                            # result_library["{problemname}_hyp{true_hyp}_ignore_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}".format(**locals())] = result_seed
 
+                            simple_obs = obscure_blind.write_ignore_most_uncertainty_to_file(observations, ignore_most_complex_folder+obs_f)
+                            # num_obs = len(simple_obs) if simple_obs is not None else 0
 
     os.system("rm -f "+ tempfile + " " + optimal_plan_details + " " + optimal_plan_trace)
 
     return result_library
 
 
-def evaluate_problem(folder, problemname, versions=("ignore","complex"), modes=("A","AF"), result_library=None, obs_per_setting=3, obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), num_hyps=None):
+def evaluate_problem(folder, problemname, versions=("ignore","simple","complex"), modes=("A","AF"), result_library=None, obs_per_setting=3, obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), num_hyps=None):
     if result_library is None:
         result_library = {}
 
 
     basename = folder + "/" + problemname + "/"
 
-    complex_folder = basename + "complex_observations/"
-    ignore_complex_folder = basename + "simple_version_observations/"
-    ordered_folder = basename + "ordered_versions_of_observations/"
+    complex_folder = basename +"complex_observations/"
+    ignore_complex_folder = basename +"ignore_observations/"
+    ignore_most_complex_folder = basename +"simple_observations/"
+    ordered_folder = basename +"order_observations/"
 
-    template_f = basename + "template.pddl"
     domain_f = basename + "domain.pddl"
-    temp_problem = basename + "temp_problem.pddl"
-    temp_solution_f = basename + "temp_sol.details"
-
-    # true_hyp = open(basename + "real_hyp.dat")
-    # true_hyp_str = true_hyp.read().replace(',', '\n')
-    # true_hyp.close()
-    correct_hyp = None
     hyps_f = basename + "hyps.dat"
-    hyps = []
-    with open(hyps_f, 'r') as hyps_file:
-        for line in hyps_file:
-            hyps.append(line.replace(',','\n'))
-            # if set(fl.strip() for fl in true_hyp_str.split("\n")) == set(fl.strip() for fl in hyps[-1].split("\n")):
-            #     true_hyp = len(hyps)-1
+    template_f = basename + "template.pddl"
 
-    hyp_costs = []
-    hyp_problems = []
-    # Compute optimal unconstrained solutions for each hypothesis:
-    for hyp in range(len(hyps)):
-        hyp_problem = basename+ "hyp_{}_problem.pddl".format(hyp)
-        hyp_problems.append(hyp_problem)
-        fill_template_pddl(template_f,hyp_problem, hyps[hyp])
-        hyp_sol = basename + "hyp_{}_solution.details".format(hyp)
-        if not os.path.exists(hyp_sol):
-            _, cost, _ = run_wa_planner(domain_f,hyp_problem,hyp_sol)
-        else:
-            _, cost = obscure_blind.read_plan_details(hyp_sol)
-        hyp_costs.append(cost)
 
+    hyp_costs, hyp_problems, hyps = read_hypotheses_and_get_costs(basename, domain_f, hyps_f, template_f)
+
+    evaluation_start_time = TIMER.time()
+
+    num_runs_total = (len(hyps) if num_hyps is None else num_hyps) * len(versions) * len(modes) * len(obs_percs) * len(unord_percs) * len(garble_percs) *obs_per_setting
+    num_runs_so_far = 0
 
     for true_hyp in range(len(hyps) if num_hyps is None else num_hyps):
         for version in versions:
@@ -197,15 +193,16 @@ def evaluate_problem(folder, problemname, versions=("ignore","complex"), modes=(
                 the_folder = complex_folder
             elif version == "ignore":
                 the_folder = ignore_complex_folder
+            elif version == "simple":
+                the_folder = ignore_most_complex_folder
             elif version == "order":
                 the_folder = ordered_folder
             else:
                 print("Evaluation version {} not recognized".format(version))
                 exit(1)
+
             for mode in modes:
-                if mode.upper() == "A": mode = "A"
-                elif mode.upper().replace(' ','').replace('+','') == "AF": mode = "AF"
-                else:
+                if mode != "A" and mode != "AF":
                     print("Mode not recognized. Bailing out")
                     exit(0)
                 for observed_perc in obs_percs:
@@ -214,6 +211,8 @@ def evaluate_problem(folder, problemname, versions=("ignore","complex"), modes=(
                             for idx in range(obs_per_setting):
                                 obs_perc_big, un_perc_big, garb_perc_big = 100 * observed_perc, 100 * unordered_perc, 100 * garble_perc
                                 obs_f = "{problemname}_hyp{true_hyp}_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}_{idx}.obs".format(**locals())
+                                num_runs_so_far+=1
+                                print("{} of {} runs. {:.3f} seconds so far, {:.3f} estimated remaining".format(num_runs_so_far, num_runs_total, TIMER.time() - evaluation_start_time, (TIMER.time() - evaluation_start_time)/num_runs_so_far * (num_runs_total-num_runs_so_far) ))
                                 print("Observation from ", the_folder+obs_f)
 
                                 obs_hyp_costs = {}
@@ -222,7 +221,7 @@ def evaluate_problem(folder, problemname, versions=("ignore","complex"), modes=(
                                 correct = False
                                 start_time = TIMER.time()
                                 if os.path.exists(the_folder+obs_f) :
-                                    obs_count =  obscure_blind.count_obs_from_file(the_folder + obs_f)
+                                    obs_count =  obscure_blind.count_obs_from_file(the_folder + obs_f, version)
 
                                     if obs_count == 0: # No observations means everything is indicated
                                         indicated = range(len(hyps))
@@ -233,10 +232,10 @@ def evaluate_problem(folder, problemname, versions=("ignore","complex"), modes=(
                                         for hyp in range(len(hyps)):
                                             if version == "complex":
                                                 os.system("./pr2plan_complex -d {} -i {} -o {} {}".format(domain_f, hyp_problems[hyp], the_folder+obs_f, DEVNULL))
-                                            elif version == "ignore":
+                                            elif version == "ignore" or version == "simple":
                                                 os.system("./pr2plan -d {} -i {} -o {} {}".format(domain_f, hyp_problems[hyp], the_folder+obs_f, DEVNULL))
                                             obs_hyp_sol = the_folder + obs_f.replace(".obs", "_hyp{}.solution".format(hyp))
-                                            _, cost, time = run_wa_planner("pr-domain.pddl", "pr-problem.pddl", obs_hyp_sol, bound=hyp_costs[hyp])
+                                            _, cost, time = run_planner("pr-domain.pddl", "pr-problem.pddl", obs_hyp_sol, bound=hyp_costs[hyp])
                                             # os.system("rm -f {}".format(obs_hyp_sol))
 
                                             print("Hyp {}: cost {}, time {:.10f}".format(hyp, cost, time))
@@ -257,6 +256,30 @@ def evaluate_problem(folder, problemname, versions=("ignore","complex"), modes=(
                                     print(the_folder+obs_f, "does not exist.")
 
     return result_library
+
+
+def read_hypotheses_and_get_costs(basename, domain_f, hyps_f, template_f):
+    hyps = []
+    with open(hyps_f, 'r') as hyps_file:
+        for line in hyps_file:
+            hyps.append(line.replace(',', '\n'))
+            # if set(fl.strip() for fl in true_hyp_str.split("\n")) == set(fl.strip() for fl in hyps[-1].split("\n")):
+            #     true_hyp = len(hyps)-1
+    hyp_costs = []
+    hyp_problems = []
+    # Compute optimal unconstrained solutions for each hypothesis:
+    for hyp in range(len(hyps)):
+        hyp_problem = basename + "hyp_{}_problem.pddl".format(hyp)
+        hyp_problems.append(hyp_problem)
+        fill_template_pddl(template_f, hyp_problem, hyps[hyp])
+        hyp_sol = basename + "hyp_{}_solution.details".format(hyp)
+        if not os.path.exists(hyp_sol):
+            _, cost, _ = run_planner(domain_f, hyp_problem, hyp_sol)
+        else:
+            _, cost = obscure_blind.read_plan_details(hyp_sol)
+        hyp_costs.append(cost)
+    return hyp_costs, hyp_problems, hyps
+
 
 def evaluate_problems( folder, problemnames, result_library=None, obs_per_setting=3, obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), num_hyps=None):
     if result_library is None:
@@ -299,18 +322,27 @@ def extract_results(result_library: dict):
 
     return num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time
 
-def print_extracted_results(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time,  obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), outstream=stdout):
+def print_extracted_results(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time,  obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), versions=("ignore", "simple", "complex") ,outstream=stdout):
 
-    outstream.write("||       |       |       ||                    ignore                     ||                    complex                    ||\n"
-                    "||   O   |   U   |   B   ||           A           |           AF          ||           A           |           AF          ||\n"
-                    "||       |       |       ||   O   :   C   :   G   |   O   :   C   :   G   ||   O   :   C   :   G   |   O   :   C   :   G   ||\n")
+    # outstream.write("||       |       |       ||                    ignore                     ||                    complex                    ||\n"
+    #                 "||   O   |   U   |   B   ||           A           |           AF          ||           A           |           AF          ||\n"
+    #                 "||       |       |       ||   O   :   C   :   G   |   O   :   C   :   G   ||   O   :   C   :   G   |   O   :   C   :   G   ||\n")
+    outstream.write("||       |       |       ||")
+    for version in versions:
+        outstream.write("{:^47}||".format(version))
+    outstream.write("\n||   O   |   U   |   B   ||")
+    for version in versions:
+        outstream.write("           A           |           AF          ||")
+    outstream.write("||       |       |       ||")
+    for version in versions:
+        outstream.write("   O   :   C   :   G   |   O   :   C   :   G   ||")
 
     for observed_perc in obs_percs:
         for unordered_perc in unord_percs:
             for garble_perc in garble_percs:
                 obs_perc_big, un_perc_big, garb_perc_big = 100 * observed_perc, 100 * unordered_perc, 100 * garble_perc
                 outstream.write( "||{obs_perc_big:^7.0f}|{un_perc_big:^7.0f}|{garb_perc_big:^7.0f}||".format(**locals()))
-                for version in ["ignore", "complex"]:
+                for version in versions:
                     for mode in ["A","AF"]:
                         index = "{version}_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}".format(**locals())
                         obs_size = avg_obs_sizes[index]
@@ -323,7 +355,7 @@ def print_extracted_results(num_results, avg_obs_sizes, avg_times, avg_correctne
     outstream.write("\n Avg time per problem, over all settings: {:.5f} seconds".format(overall_avg_time))
     outstream.write("\n Total time for evaluation: {:.5f} seconds".format( overall_avg_time* sum(num_results.values())))
 
-def print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time,  obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), outstream=stdout):
+def print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_correctness, avg_size_of_indicated, overall_avg_time,  obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), versions=("ignore", "simple", "complex"), outstream=stdout):
 
     header = \
     r"""
@@ -333,7 +365,28 @@ def print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_cor
      &  &  & \multicolumn{2}{c|}{\textbf{A}} & \multicolumn{2}{c|}{\textbf{A+F}} & \multicolumn{2}{c|}{\textbf{A}} & \multicolumn{2}{c|}{\textbf{A+F}} \\ \cline{4-11}
      &  &  & $|O'|$ & $|\G_T^*|$ & $|O'|$ & $|\G_T^*|$ & $|O|$ & $|\G_T^*|$ & $|O|$ & $|\G_T^*|$ \\ \hline
      """
-    outstream.write(header)
+
+    # outstream.write(header)
+    outstream.write(r"\begin{tabular}{|c|c|c")
+    for version in versions:
+        outstream.write(r"|c|c|c|c")
+    outstream.write(r"|}" + "\n" + r"\hline" + "\n" + r"\multirow{3}{*}{\textbf{O\%}} & \multirow{3}{*}{\textbf{U\%}} & \multirow{3}{*}{\textbf{B\%}} ")
+    for version in versions:
+        if version == "ignore":
+            outstream.write(r"& \multicolumn{4}{c|}{\textbf{Previous (Ignore All Uncertainty)}}")
+        if version == "simple":
+            outstream.write(r"& \multicolumn{4}{c|}{\textbf{Previous (Ignore Most Uncertainty)}}")
+        if version == "complex":
+            outstream.write(r"& \multicolumn{4}{c|}{\textbf{This}}")
+    outstream.write(r"\\ \cline{{4-{}}}".format(3+(4*len(versions))))
+    outstream.write("\n&  &  ")
+    for version in versions:
+        outstream.write(r"& \multicolumn{2}{c|}{\textbf{A}} & \multicolumn{2}{c|}{\textbf{A+F}}")
+    outstream.write(r"\\ \cline{{4-{}}}".format(3 + (4 * len(versions))))
+    outstream.write("\n&  &  ")
+    for version in versions:
+        outstream.write(r"& $|O'|$ & $|\G_T^*|$ & $|O'|$ & $|\G_T^*|$ ")
+    outstream.write(r"\\ \hline")
 
     # """\multirow{6}{*}{100} & \multirow{2}{*}{0} & 0 & 1* & 00 & .00 & 00 & 1* & 00 & .00 & 00 & 00 & .00 & 00 & 00 & .00 & 00 & 00 & 00 & 00 & 00 \\ \cline{3-21} """
     always_correct = True
@@ -344,7 +397,7 @@ def print_extracted_results_latex(num_results, avg_obs_sizes, avg_times, avg_cor
             for garble_perc in garble_percs:
                 obs_perc_big, un_perc_big, garb_perc_big = 100 * observed_perc, 100 * unordered_perc, 100 * garble_perc
                 outstream.write( "{obs_perc_big:^7.0f}&{un_perc_big:^7.0f}&{garb_perc_big:^7.0f}".format(**locals()))
-                for version in ["ignore", "complex"]:
+                for version in versions:
                     for mode in ["A","AF"]:
                         index = "{version}_{mode}_O{obs_perc_big:.0f}_U{un_perc_big:.0f}_B{garb_perc_big:.0f}".format(**locals())
                         obs_size = avg_obs_sizes[index]
@@ -415,13 +468,22 @@ if __name__ == '__main__':
     # num_hyps = 1
 
     ## 3 settings averaging over 6
-    obs_percs = (1.0, .5, .25)
+    # obs_percs = (1.0, .5, .25)
+    # unord_percs = (.5,)
+    # garble_percs = (.25,)
+    # obs_per_setting = 2
+    # num_hyps = 3
+
+    ## 2 settings averaging over 3
+    obs_percs = (.5, .25)
     unord_percs = (.5,)
     garble_percs = (.25,)
-    obs_per_setting = 2
-    num_hyps = 3
+    obs_per_setting = 3
+    num_hyps = 1
 
     result_library = evaluate_problem("Benchmark_Problems/block-words", "block-words_p01", obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs,obs_per_setting=obs_per_setting, num_hyps=num_hyps)
+
+    write_object_to_file(result_library, "TestFiles/results_temp")
 
     for r in result_library.values():
         print(r)
