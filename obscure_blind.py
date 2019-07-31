@@ -194,7 +194,7 @@ def read_simple_obs(filename):
             line = line.strip(" \n()\t")
             print(line)
             if len(line) != 0:
-                membs.append(action_observation(line))
+                membs.append(action_observation(line.split()))
         ret = ordered_group(membs)
         print(ret)
         return ret
