@@ -2,12 +2,17 @@
 import random
 from math import ceil, factorial
 import re
-import os
+from itertools import product, permutations
 
 
 class unordered_group:
     def __init__(self, members):
-        self.members = members
+        self.members = []
+        for memb in members:
+            if isinstance(memb, unordered_group):
+                self.members.extend(memb.members)
+            else:
+                self.members.append(memb)
     def __str__(self):
         return "{\n" + ",\n".join([str(mem) for mem in self.members]) + "\n}"
     def __len__(self):
@@ -70,7 +75,12 @@ class option_group:
 
 class ordered_group:
     def __init__(self, members):
-        self.members = members
+        self.members = []
+        for memb in members:
+            if isinstance(memb, ordered_group):
+                self.members.extend(memb.members)
+            else:
+                self.members.append(memb)
     def __str__(self):
         return "[\n" + ",\n".join([str(mem) for mem in self.members]) + "\n]"
     def __len__(self):
@@ -109,7 +119,7 @@ class action_observation:
     def __init__(self, action): # set of strings
         self.action = action
     def __str__(self):
-        return "(" + self.action + ")"
+        return "(" + " ".join(self.action) + ")"
     def __len__(self):
         return 1
     def without_fl_obs(self):
@@ -605,7 +615,7 @@ def unordered_groups_of_size_about_3(steps, unordered_perc):
 if __name__ == '__main__':
     domain_f = 'TestFiles/block_domain.pddl'
     problem_f = 'TestFiles/block_prob.pddl'
-    solution_f = 'optimal.details'
+    solution_f = 'TestFiles/optimal.details'
 
     # domain_prob = plan_tracer.get_domain_problem(domain_f, problem_f)
     # steps, trace, cost = plan_tracer.plan_and_trace_and_cost(solution_f,domain_prob)
