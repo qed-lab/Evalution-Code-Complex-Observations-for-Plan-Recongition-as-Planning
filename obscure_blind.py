@@ -157,11 +157,13 @@ def read_plan_details(solution_filename):
     cost = None
     with open(solution_filename, 'r') as file:
         for line_count, line in enumerate(file):
-            step_matcher = re.match(r'[0-9]*\. \((.*)\)', line)
+            step_matcher = re.match(r'([0-9]*)\. \((.*)\)', line)
             cost_matcher = re.match(r'Plan found with cost: ([0-9]*)', line)
             if step_matcher is not None:
                 # print(step_matcher.group())
-                step = step_matcher.group(1)
+                if step_matcher.group(1) == "1": # restart list if the planner produced several plans
+                    steps = []
+                step = step_matcher.group(2)
                 step = action_observation(step.split())
                 steps.append(step)
             elif cost_matcher is not None:
@@ -615,15 +617,15 @@ def unordered_groups_of_size_about_3(steps, unordered_perc):
 if __name__ == '__main__':
     domain_f = 'TestFiles/block_domain.pddl'
     problem_f = 'TestFiles/block_prob.pddl'
-    solution_f = 'TestFiles/optimal.details'
+    solution_f = 'TestFiles/temp.solution'
 
     # domain_prob = plan_tracer.get_domain_problem(domain_f, problem_f)
     # steps, trace, cost = plan_tracer.plan_and_trace_and_cost(solution_f,domain_prob)
 
     steps, cost = read_plan_details(solution_f)
-    # for step in steps:
-    #     print(plan_tracer.action_name(step), end=", ")
-    # print()
+    for step in steps:
+        print(str(step))
+    print()
 
     # veiled_fluents = obscure_states_new_fl(trace)
     # for state in veiled_fluents:
