@@ -12,7 +12,7 @@ DEVNULL = " > /dev/null"
 
 class Results:
     def __init__(self, problem, true_hyp, mode, version, observed_perc, unordered_perc, garble_perc, obs_idx,
-                 obs_count, indicated : list = None, costs_of_hyps_with_obs=None, time=None, hyp_times=None):
+                 obs_count, indicated = None, costs_of_hyps_with_obs=None, time=None, hyp_times=None):
         self.problem = problem
         self.true_hyp = true_hyp
         self.mode = mode
@@ -29,7 +29,7 @@ class Results:
         self.hyp_times = hyp_times
         self.is_correct = (true_hyp in indicated) if indicated is not None else None
 
-    def fill_result(self, indicated : list, hyp_observation_costs, time, hyp_times):
+    def fill_result(self, indicated , hyp_observation_costs, time, hyp_times):
         self.indicated = indicated
         self.time = time
         self.hyp_times = hyp_times
