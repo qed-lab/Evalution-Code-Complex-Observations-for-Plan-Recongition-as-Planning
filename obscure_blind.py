@@ -38,6 +38,14 @@ class unordered_group:
         the_one = random.sample(self.members, 1)[0]
         the_one = the_one.reduce_unordered_groups()
         return the_one
+    def get_all_total_orderings(self):
+        member_orderings = [memb.get_all_total_orderings() for memb in self.members]
+
+        all_ords = list( product(*member_orderings) )
+        permutations_of_orders = [permutations( ordered ) for ordered in all_ords]
+        biglist = [item for sublist in permutations_of_orders for item in sublist]
+
+        return  list(ordered_group(list(p)) for p in biglist)
 
 class option_group:
     def __init__(self, members):
@@ -71,7 +79,8 @@ class option_group:
         if len(group.members) == 1:
             return group.members[0]
         return group
-
+    def get_all_total_orderings(self):
+        return [self]
 
 class ordered_group:
     def __init__(self, members):
@@ -114,6 +123,13 @@ class ordered_group:
         if len(group.members) == 1:
             return group.members[0]
         return group
+    def get_all_total_orderings(self):
+
+        member_orderings = [memb.get_all_total_orderings() for memb in self.members]
+        all_ords = list( product(*member_orderings) )
+
+        return [ordered_group(list(o)) for o in all_ords ]
+
 
 class action_observation:
     def __init__(self, action): # set of strings
@@ -133,6 +149,8 @@ class action_observation:
         return self
     def reduce_unordered_groups(self):
         return self
+    def get_all_total_orderings(self):
+        return [self]
 
 class fluent_observation:
     def __init__(self, fluents):
@@ -150,7 +168,8 @@ class fluent_observation:
         return self
     def reduce_unordered_groups(self):
         return self
-
+    def get_all_total_orderings(self):
+        return [self]
 
 def read_plan_details(solution_filename):
     steps = []
@@ -211,19 +230,42 @@ def parse_complex_obs(observation_string):
         return ordered_group([])
     obs_s = observation_string.strip()
     if obs_s[0] == '[' and obs_s[-1] == ']':
-        members = [parse_complex_obs(memb) for memb in obs_s.strip("[]").split(',')]
+        members = [parse_complex_obs(memb) for memb in separate_members(obs_s.strip("[]").strip())]
         return ordered_group(members)
     elif obs_s[0] == '{' and obs_s[-1] == '}':
-        members = [parse_complex_obs(memb) for memb in obs_s.strip("{}").split(',')]
+        members = [parse_complex_obs(memb) for memb in separate_members(obs_s.strip("{}").strip())]
         return unordered_group(members)
     elif obs_s[0] == '|' and obs_s[-1] == '|':
-        members = [parse_complex_obs(memb) for memb in obs_s.strip("|").split(',')]
+        members = [parse_complex_obs(memb) for memb in separate_members(obs_s.strip("|").strip())]
         return option_group(members)
     elif obs_s[0] == '~' and obs_s[-1] == '~':
         fluents = [ memb.strip(" \t\n()") for memb in obs_s.strip("~").split('^')]
         return fluent_observation(fluents)
     else:
         return action_observation(obs_s.strip("() \t\n"))
+
+def separate_members(obs_string):
+    items = []
+    braces, brackets = 0,0
+    bar = False
+    item_start = 0
+    for place in range(len(obs_string)):
+        c = obs_string[place]
+        if c == "{":
+            braces += 1
+        if c == "}":
+            braces -= 1
+        if c == "[":
+            brackets += 1
+        if c == "]":
+            brackets -=1
+        if c == "|":
+            bar = not bar
+        if c == "," and braces == 0 and brackets == 0 and not bar:
+            items.append(obs_string[item_start:place])
+            item_start = place+1
+    items.append(obs_string[item_start:])
+    return items
 
 # does not return with the first and goal states
 def merge_steps_and_states(steps, states):
@@ -622,10 +664,10 @@ if __name__ == '__main__':
     # domain_prob = plan_tracer.get_domain_problem(domain_f, problem_f)
     # steps, trace, cost = plan_tracer.plan_and_trace_and_cost(solution_f,domain_prob)
 
-    steps, cost = read_plan_details(solution_f)
-    for step in steps:
-        print(str(step))
-    print()
+    # steps, cost = read_plan_details(solution_f)
+    # for step in steps:
+    #     print(str(step))
+    # print()
 
     # veiled_fluents = obscure_states_new_fl(trace)
     # for state in veiled_fluents:
@@ -633,23 +675,37 @@ if __name__ == '__main__':
 
     # obscured_obs = obscure_AF(steps, trace, 1, 1, 0.25, .5)
     # obscured_removing_fluents = remove_fluent_obs(obscured_obs)
-    obscured_steps = obscure_A(steps, 1, 1, 0.25)
-    print(cost)
-    # print(obs_string(obscured_obs))
-    # print("With fluents and option groups: ", count_total_orderings(obscured_obs, False))
-    # print(obs_string(obscured_removing_fluents))
-    # print("Without fluents and with option groups: ", count_total_orderings(obscured_removing_fluents,False))
-    # print("Without fluents and without option groups: ", count_orderings_ramirez(obscured_obs))
-    print(obs_string(obscured_steps), "\n\n")
-    print(str(obscured_steps))
-    # print("With option groups: ", count_total_orderings(obscured_steps,False))
-    # print("Without option groups: ", count_orderings_ramirez(obscured_steps))
+    # obscured_steps = obscure_A(steps, 1, 1, 0.25)
+    # print(cost)
+    # # print(obs_string(obscured_obs))
+    # # print("With fluents and option groups: ", count_total_orderings(obscured_obs, False))
+    # # print(obs_string(obscured_removing_fluents))
+    # # print("Without fluents and with option groups: ", count_total_orderings(obscured_removing_fluents,False))
+    # # print("Without fluents and without option groups: ", count_orderings_ramirez(obscured_obs))
+    # print(obs_string(obscured_steps), "\n\n")
+    # print(str(obscured_steps))
+    # # print("With option groups: ", count_total_orderings(obscured_steps,False))
+    # # print("Without option groups: ", count_orderings_ramirez(obscured_steps))
+    #
+    # # print(unordered_groups_of_size_about_3( [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] , .01))
+    #
+    # # print(str(read_complex_obs("")))
+    #
+    # exit(1)
 
-    # print(unordered_groups_of_size_about_3( [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16] , .01))
 
-    # print(str(read_complex_obs("")))
+    sample_obs = "[a,{b,[{c,d},e]},f]"
+    obs = parse_complex_obs(sample_obs)
+    # print(str(obs))
+    # obs = obscure_A(obs.members, 1, 0, 0)
+    print(str(obs), "\n")
+    ords = obs.get_all_total_orderings()
+    for o in ords:
+        print(str(o))
 
-    exit(1)
 
 
-
+    # alpha = "abc"
+    # print(list(list(t) for t in permutations(alpha)))
+    #
+    # print(list(list(t) for t in product(alpha, alpha)))
