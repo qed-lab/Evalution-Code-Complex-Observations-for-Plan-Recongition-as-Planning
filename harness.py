@@ -124,6 +124,8 @@ def write_observations(folder, problemname, result_library=None, obs_per_setting
     print(hyps)
     print(len(hyps))
 
+
+
     for mode in ("A","AF"):
         for true_hyp in range(len(hyps)):
             fill_template_pddl(template_f, tempfile, hyps[true_hyp])
@@ -267,14 +269,21 @@ def read_hypotheses_and_get_costs(basename, domain_f, hyps_f, template_f):
             #     true_hyp = len(hyps)-1
     hyp_costs = []
     hyp_problems = []
+
+    try:
+        os.makedirs(basename + "_hypotheses")
+    except FileExistsError:
+        pass
+
     # Compute optimal unconstrained solutions for each hypothesis:
     for hyp in range(len(hyps)):
-        hyp_problem = basename + "hyp_{}_problem.pddl".format(hyp)
+        hyp_problem = basename + "_hypotheses/hyp_{}_problem.pddl".format(hyp)
         hyp_problems.append(hyp_problem)
         fill_template_pddl(template_f, hyp_problem, hyps[hyp])
-        hyp_sol = basename + "hyp_{}_solution.details".format(hyp)
+        hyp_sol = basename + "_hypotheses/hyp_{}.solution".format(hyp)
         if not os.path.exists(hyp_sol):
             _, cost, _ = run_planner(domain_f, hyp_problem, hyp_sol)
+            os.system("rm {}".format(hyp_problem))
         else:
             _, cost = obscure_blind.read_plan_details(hyp_sol)
         hyp_costs.append(cost)
