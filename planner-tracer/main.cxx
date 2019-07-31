@@ -97,7 +97,7 @@ float do_search( Search_Engine& engine, const STRIPS_Problem& plan_prob, float b
 	engine.set_budget( budget );
 	engine.start();
 
-	std::vector< aptk::Action_Idx > plan;
+  std::vector< aptk::Action_Idx > plan;
 	std::vector< aptk::State > trace;
 	float				cost;
 
@@ -107,36 +107,76 @@ float do_search( Search_Engine& engine, const STRIPS_Problem& plan_prob, float b
 	unsigned expanded_0 = engine.expanded();
 	unsigned generated_0 = engine.generated();
 
+  std::vector< aptk::Action_Idx > best_plan;
+  std::vector< aptk::State > best_trace;
+  float       best_cost = infty;
+  float best_time;
+  unsigned best_expanded;
+  unsigned best_generated;
+
 	while ( engine.find_solution( cost, plan, trace ) ) {
-		out << "Plan found with cost: " << cost << std::endl;
-		for ( unsigned k = 0; k < plan.size(); k++ ) {
-			out << k+1 << ". ";
-			const aptk::Action& a = *(plan_prob.actions()[ plan[k] ]);
-			out << a.signature();
-			out << std::endl;
-		}
-    for ( unsigned k = 0; k < trace.size(); k++){
+		// out << "Plan found with cost: " << cost << std::endl;
+		// for ( unsigned k = 0; k < plan.size(); k++ ) {
+		// 	out << k+1 << ". ";
+		// 	const aptk::Action& a = *(plan_prob.actions()[ plan[k] ]);
+		// 	out << a.signature();
+		// 	out << std::endl;
+		// }
+    // for ( unsigned k = 0; k < trace.size(); k++){
+    //   // trace_out << trace[k];
+    //   for(unsigned i = 0; i < trace[k].fluent_vec().size(); i++) {
+    //     trace_out << trace[k].problem().fluents()[trace[k].fluent_vec()[i]]->signature();
+    //     if(i != trace[k].fluent_vec().size()-1){
+    //       trace_out << ", ";
+    //     }
+    //   }
+    //   trace_out << std::endl;
+    // }
+		float tf = aptk::time_used();
+		unsigned expanded_f = engine.expanded();
+		unsigned generated_f = engine.generated();
+		// out << "Time: " << tf - t0 << std::endl;
+		// out << "Generated: " << generated_f - generated_0 << std::endl;
+		// out << "Expanded: " << expanded_f - expanded_0 << std::endl;
+    if (cost < best_cost){
+      best_plan.swap(plan);
+      best_trace.swap(trace);
+      best_cost = cost;
+      best_time = tf - t0;
+      best_generated = generated_f - generated_0;
+      best_expanded = expanded_f - expanded_0;
+    }
+		t0 = tf;
+		expanded_0 = expanded_f;
+		generated_0 = generated_f;
+		plan.clear();
+    trace.clear();
+	}
+  if(best_cost != infty){
+    out << "Plan found with cost: " << best_cost << std::endl;
+    for ( unsigned k = 0; k < best_plan.size(); k++ ) {
+    	out << k+1 << ". ";
+    	const aptk::Action& a = *(plan_prob.actions()[ best_plan[k] ]);
+    	out << a.signature();
+    	out << std::endl;
+    }
+    for ( unsigned k = 0; k < best_trace.size(); k++){
       // trace_out << trace[k];
-      for(unsigned i = 0; i < trace[k].fluent_vec().size(); i++) {
-        trace_out << trace[k].problem().fluents()[trace[k].fluent_vec()[i]]->signature();
-        if(i != trace[k].fluent_vec().size()-1){
+      for(unsigned i = 0; i < best_trace[k].fluent_vec().size(); i++) {
+        trace_out << best_trace[k].problem().fluents()[best_trace[k].fluent_vec()[i]]->signature();
+        if(i != best_trace[k].fluent_vec().size()-1){
           trace_out << ", ";
         }
       }
       trace_out << std::endl;
     }
+    out << "Time: " << best_time << std::endl;
+    out << "Generated: " << best_generated << std::endl;
+    out << "Expanded: " << best_expanded << std::endl;
+  } else {
+    out << "No plan found." << std::endl;
+  }
 
-		float tf = aptk::time_used();
-		unsigned expanded_f = engine.expanded();
-		unsigned generated_f = engine.generated();
-		out << "Time: " << tf - t0 << std::endl;
-		out << "Generated: " << generated_f - generated_0 << std::endl;
-		out << "Expanded: " << expanded_f - expanded_0 << std::endl;
-		t0 = tf;
-		expanded_0 = expanded_f;
-		generated_0 = generated_f;
-		plan.clear();
-	}
 	float total_time = aptk::time_used() - ref;
 	out << "Total time: " << total_time << std::endl;
 	out << "Nodes generated during search: " << engine.generated() << std::endl;
