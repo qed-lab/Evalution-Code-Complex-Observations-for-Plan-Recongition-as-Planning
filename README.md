@@ -9,7 +9,8 @@ for more info. Macs should be able to use [brew](https://brew.sh) for an easy in
 
 ### pr2plan
 See obs-compiler.tar.bz2 found [here](https://sites.google.com/site/prasplanning/file-cabinet) for download. 
-Compile with `cd mod-metric-ff; make libff; cd ..; make all`, and work as best you can through any bugs. When compiled,
+Compile with `cd mod-metric-ff; make libff; cd ..; make all`, and work as best you can through any bugs. It may help 
+to comment out the STATIC line in the Makefile, as some systems (including Mac) don't like it. When compiled,
  copy the executable 'pr2plan' to this directory. If `make libff` gives you trouble here, likely it will give you the 
  same trouble in pr2plan_complex and LAPKT, so take notes of how you fix issues.
 
@@ -19,7 +20,12 @@ See [here](https://github.com/qed-lab/Complex-Observation-Compiler) for download
  _Please_ report bugs and compilation issues to its repository.
 
 ### Compiling the planner (with tracer)
- - Download [LAPKT](http://lapkt.org/index.php?title=Download), and make sure you can use the `scons` command. (LAPKT should have resources) 
+ - Download [LAPKT](http://lapkt.org/index.php?title=Download), and set it up. (LAPKT should have resources) 
+    - Make sure to set up LAPKT's FF parser in 'external/libff', as in [these](http://lapkt.org/index.php?title=GettingStarted)
+     instructions. If it has issues finding '/usr/include/<anything>' you may have to remove the explicit paths from 
+     the bottom. Regex in an IDE works best there.
+ 
+ - Make sure you can use the `scons` command. Brew, or `sudo apt-get` is your friend here, or else look [here](https://scons.org).
 
 - In the planner-tracer directory, open the 'SConstruct' file and update `LAPKT_DIR=`. This can be a relative filepath.
 
