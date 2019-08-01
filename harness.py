@@ -314,15 +314,26 @@ def read_hypotheses_and_get_costs(basename, domain_f, hyps_f, template_f):
     return hyp_costs, hyp_problems, hyps
 
 
-def evaluate_problems( folder, problemnames, result_library=None, versions=("ignore", "simple", "complex"), modes = ("A","AF"), obs_per_setting=3, obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), num_hyps=None):
+def evaluate_problems( folder, problemnames, result_library=None, versions=("ignore", "simple", "complex"), modes = ("A","AF"), obs_per_setting=3, obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), num_hyps=None, max_ordered_obs=25):
     if result_library is None:
         result_library = {}
 
     for problemname in problemnames:
-        evaluate_problem(folder=folder,problemname=problemname,versions=versions,modes=modes,result_library=result_library, obs_per_setting=obs_per_setting, obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs, num_hyps=num_hyps)
+        evaluate_problem(folder=folder,problemname=problemname,versions=versions,modes=modes,result_library=result_library, obs_per_setting=obs_per_setting, obs_percs=obs_percs, unord_percs=unord_percs, garble_percs=garble_percs, num_hyps=num_hyps,max_ordered_obs=max_ordered_obs)
 
     return result_library
 
+def evaluate_domains(folder, domain_names=None,  versions=("ignore", "simple", "complex"), modes = ("A","AF"), obs_per_setting=3, obs_percs=(1.0, .5, .25), unord_percs=(0.0, .5, 1.0), garble_percs=(0.0, .25), num_hyps=None, max_ordered_obs=25):
+    if domain_names is None:
+        domain_names = [d for d in os.listdir(folder) if os.path.isdir(os.path.join(folder,d))]
+
+    domain_results = {}
+    for domain in domain_names:
+        domain_path = folder + domain
+        problems = [p for p in os.listdir(domain_path) if os.path.isdir(os.path.join(domain_path, p))]
+        domain_results[domain] = evaluate_problems(domain_path, problems,result_library=None,versions=versions,modes=modes,obs_per_setting=obs_per_setting,obs_percs=obs_percs,unord_percs=unord_percs,garble_percs=garble_percs,num_hyps=num_hyps,max_ordered_obs=max_ordered_obs)
+        print("domain {} and domain_path {} and problems {}".format(domain,domain_path,problems))
+    return domain_results
 
 def extract_results(result_library: dict):
 
@@ -462,15 +473,9 @@ def fill_template_pddl(template_f, output_f, fill):
     outstream.close()
     instream.close()
 
-def lowercase_file(filename):
-    with open(filename, "r") as file:
-        content = file.read()
-    with open(filename, "w") as out:
-        out.write(content.lower())
-
 
 if __name__ == '__main__':
-
+    # evaluate_domains("Benchmark_Problems/")
 
     # write_observations("Benchmark_Problems/block-words", "block-words_p01")
     versions = ["ignore", "simple","complex"]
