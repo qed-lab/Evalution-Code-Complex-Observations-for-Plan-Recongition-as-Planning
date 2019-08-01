@@ -201,7 +201,7 @@ def read_trace(trace_filename):
 def count_obs_from_file(filename, version):
     if version == "complex":
         return len(read_complex_obs(filename))
-    elif version == "ignore" or version == "simple":
+    elif version == "ignore" or version == "simple" or version == "ordered":
         return len(read_simple_obs(filename))
 
 
@@ -329,7 +329,23 @@ def obscure_states_positive_fl(states, visibility=.5):
 #
 #     return option_group(alternative_ops)
 
-def write_ignore_all_uncertainty_to_file(obs_group, file):
+def write_simple_obs_to_file(obs_group, filename):
+
+    with open(filename, 'w') as out:
+        if isinstance(obs_group, ordered_group):
+            for obs in obs_group.members:
+                if not isinstance(obs, action_observation):
+                    print("Non-action observation found in supposedly simplified ordered group.")
+                    exit(1)
+                out.write(str(obs) + "\n")
+        elif isinstance(obs_group, action_observation):
+            out.write(str(obs_group))
+        else:
+            print("Not-simplified observation found in supposedly simplified group.")
+            exit(1)
+
+
+def write_ignore_all_uncertainty_to_file(obs_group, filename):
 
     if not isinstance(obs_group, ordered_group):
         print("Tried to write a not ordered group to file for previous work eval.")
@@ -344,22 +360,12 @@ def write_ignore_all_uncertainty_to_file(obs_group, file):
     if obs_group is None:
         return obs_group
 
-    with open(file, 'w') as out:
-        if isinstance(obs_group, ordered_group):
-            for obs in obs_group.members:
-                if not isinstance(obs, action_observation):
-                    print("Non-action observation found in supposedly simplified ordered group.")
-                    exit(1)
-                out.write(str(obs) + "\n")
-        elif isinstance(obs_group, action_observation):
-            out.write(str(obs_group))
-        else:
-            print("Not-simplified observation found in supposedly simplified group.")
-            exit(1)
+
+    write_simple_obs_to_file(obs_group, filename)
 
     return obs_group
 
-def write_ignore_most_uncertainty_to_file(obs_group, file):
+def write_ignore_most_uncertainty_to_file(obs_group, filename):
     if not isinstance(obs_group, ordered_group):
         print("Tried to write a not ordered group to file for previous work eval.")
         exit(1)
@@ -373,18 +379,7 @@ def write_ignore_most_uncertainty_to_file(obs_group, file):
     if obs_group is None:
         return obs_group
 
-    with open(file, 'w') as out:
-        if isinstance(obs_group, ordered_group):
-            for obs in obs_group.members:
-                if not isinstance(obs, action_observation):
-                    print("Non-action observation found in supposedly simplified ordered group.")
-                    exit(1)
-                out.write(str(obs) + "\n")
-        elif isinstance(obs_group, action_observation):
-            out.write(str(obs_group))
-        else:
-            print("Not-simplified observation found in supposedly simplified group.")
-            exit(1)
+    write_simple_obs_to_file(obs_group, filename)
 
     return obs_group
 
