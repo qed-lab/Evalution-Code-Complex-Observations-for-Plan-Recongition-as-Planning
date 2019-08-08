@@ -14,9 +14,8 @@ __pycache__
 .idea
 
 
-
+*.sol
 *_observations
-*.solution
 _hypotheses
 
 
