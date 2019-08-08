@@ -225,18 +225,18 @@ def read_simple_obs(filename):
         membs = []
         for line in file:
             line = line.strip(" \n()\t")
-            print(line)
+            # print(line)
             if len(line) != 0:
                 membs.append(action_observation(line.split()))
         ret = ordered_group(membs)
-        print(ret)
+        # print(ret)
         return ret
 
 def read_complex_obs(filename):
 
     with open(filename, 'r') as file:
         observations = file.read()
-        print(observations)
+        # print(observations)
         return parse_complex_obs(observations)
 
 def parse_complex_obs(observation_string):
