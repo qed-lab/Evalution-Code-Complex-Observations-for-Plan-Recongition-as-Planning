@@ -4,6 +4,7 @@ from math import ceil, factorial
 import re
 from itertools import product, permutations
 
+ERROR_LOG_FILE="errors.log"
 
 class unordered_group:
     def __init__(self, members):
@@ -174,10 +175,13 @@ class fluent_observation:
 def read_plan_details(solution_filename):
     steps = []
     cost = None
+    total_time = None
     with open(solution_filename, 'r') as file:
         for line_count, line in enumerate(file):
             step_matcher = re.match(r'([0-9]*)\. \((.*)\)', line)
-            cost_matcher = re.match(r'Plan found with cost: ([0-9]*)', line)
+            cost_matcher = re.match(r'([0-9]*) plan\(s\) found with best cost: ([0-9]*)', line)
+            time_matcher = re.match(r'Total time: ([0-9]*\.[0-9]+|[0-9]+)', line)
+            num_loops_matcher = re.match(r'Loops done: ([0-9]*)',line)
             if step_matcher is not None:
                 # print(step_matcher.group())
                 if step_matcher.group(1) == "1": # restart list if the planner produced several plans
@@ -186,8 +190,18 @@ def read_plan_details(solution_filename):
                 step = action_observation(step.split())
                 steps.append(step)
             elif cost_matcher is not None:
-                cost = int(cost_matcher.group(1))
-    return steps, cost
+                num_plans_made = int(cost_matcher.group(1))
+                if num_plans_made > 1:
+                    with open(ERROR_LOG_FILE, "a") as error_log:
+                        error_log.write("{} found {} plans, indicating a non-optimal planner.\n".format(solution_filename,num_plans_made))
+                cost = int(cost_matcher.group(2))
+            elif time_matcher is not None:
+                total_time = float(time_matcher.group(1))
+            elif num_loops_matcher is not None:
+                num_loops = int(num_loops_matcher.group(1))
+                if num_loops > 1:
+                    print("Num loops done was {} for {}".format(num_loops,solution_filename))
+    return steps, cost, total_time
 
 def read_trace(trace_filename):
     trace = []
@@ -242,7 +256,7 @@ def parse_complex_obs(observation_string):
         fluents = [ memb.strip(" \t\n()") for memb in obs_s.strip("~").split('^')]
         return fluent_observation(fluents)
     else:
-        return action_observation(obs_s.strip("() \t\n"))
+        return action_observation(obs_s.strip("() \t\n").split())
 
 def separate_members(obs_string):
     items = []
@@ -271,6 +285,9 @@ def separate_members(obs_string):
 def merge_steps_and_states(steps, states):
 
     if len(steps) != len(states):
+        print("Step length not equal to trace length!")
+        print(steps)
+        print(states)
         return None
 
     merged_list = []
