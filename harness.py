@@ -6,6 +6,7 @@ from sys import stdout
 import pickle
 import random
 from math import ceil
+import argparse
 
 DEVNULL = " > /dev/null"
 # DEVNULL = " "
@@ -1006,10 +1007,9 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
 #                                         unord_percs=unord_percs, garble_percs=garble_percs,max_num_tot_orders=max_num_tot_orders)
 
 
-def run_full_thing(domain):
+def run_domain(domain, settings):
     """Assumes you've already got the observation files in place."""
     folder = "Benchmark_Problems/" + domain
-    settings = make_settings()
 
     evaluate_domain(folder, settings, result_file=folder + "/results.object")
 
@@ -1017,21 +1017,20 @@ def run_full_thing(domain):
 
 if __name__ == '__main__':
 
+    parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
+    parser.add_argument('domain', choices=['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'])
+    parser.add_argument('--simple', action='store_true', help='Use simpler set of settings (defaults to a full evaluation)')
+    parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
+    parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
+    args = parser.parse_args()
 
-    settings = make_settings()
-
-    # write_observation_domain_settings(settings, "Benchmark_Problems/block-words")
-    print(count_runs_domain("Benchmark_Problems/block-words", settings, max_ordered=0))
-    # # run_full_thing("block-words")
-
-    # write_observation_domain_settings(settings, "Benchmark_Problems/easy-grid-navigation")
-    print(count_runs_domain("Benchmark_Problems/easy-grid-navigation", settings, max_ordered=0))
-    # # run_full_thing("easy-grid-navigation")
-
-    # write_observation_domain_settings(settings, "Benchmark_Problems/easy-ipc-grid")
-    print(count_runs_domain("Benchmark_Problems/easy-ipc-grid", settings, max_ordered=0))
-    # # run_full_thing("easy-ipc-grid")
-
-    # write_observation_domain_settings(settings, "Benchmark_Problems/logistics")
-    print(count_runs_domain("Benchmark_Problems/logistics", settings, max_ordered=0))
-    # # run_full_thing("logistics")
+    if args.simple:
+        settings = make_small_settings()
+    else:
+        settings = make_settings()
+    if args.process:
+        print("Processing results from domain '{}'.".format(args.domain))
+        print("UNFINISHED")
+    else:
+        print("Running domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.domain, count_runs_domain("Benchmark_Problems/"+args.domain, settings, max_ordered=args.max_ordered)))
+        # run_domain(args.domain, settings)
