@@ -23,3 +23,6 @@ _hypotheses
 pr-domain.pddl
 pr-problem.pddl
 *.stats
+*.object
+ff
+planner2
