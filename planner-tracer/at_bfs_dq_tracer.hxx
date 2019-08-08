@@ -296,7 +296,16 @@ public:
 		Search_Node *head = get_node();
 		int counter =0;
 		while(head) {
-			if ( head->gn() >= bound() )  {
+      if ( (time_used() - m_t0 ) > m_time_budget )
+        return NULL;
+      if ( head->gn() >= bound() )  {
+				inc_pruned_bound();
+				close(head);
+				head = get_node();
+				continue;
+			}
+      // Assumes an admissible (optimistic) heuristic.
+      if ( head->fn() >= bound() )  {
 				inc_pruned_bound();
 				close(head);
 				head = get_node();
@@ -308,8 +317,6 @@ public:
 				set_bound( head->gn() );
 				return head;
 			}
-			if ( (time_used() - m_t0 ) > m_time_budget )
-				return NULL;
 
 			eval( head );
 			process(head);
