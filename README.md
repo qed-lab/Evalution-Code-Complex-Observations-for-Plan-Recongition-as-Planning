@@ -20,7 +20,7 @@ See [here](https://github.com/qed-lab/Complex-Observation-Compiler) for download
  _Please_ report bugs and compilation issues to its repository.
 
 ### Compiling the planner (with tracer)
- - Download [LAPKT](http://lapkt.org/index.php?title=Download), and set it up. (LAPKT should have resources) 
+ - Download [LAPKT](http://lapkt.org/index.php?title=Download), and set it up. (LAPKT should have resources. You'll need boost.) 
     - Make sure to set up LAPKT's FF parser in 'external/libff', as in [these](http://lapkt.org/index.php?title=GettingStarted)
      instructions. If it has issues finding '/usr/include/<anything>' you may have to remove the explicit paths from 
      the bottom. Regex in an IDE works best there.
@@ -28,6 +28,8 @@ See [here](https://github.com/qed-lab/Complex-Observation-Compiler) for download
  - Make sure you can use the `scons` command. Brew, or `sudo apt-get` is your friend here, or else look [here](https://scons.org).
 
 - In the planner-tracer directory, open the 'SConstruct' file and update `LAPKT_DIR=`. This can be a relative filepath.
+
+    - You may also have to update 'include_paths' and 'lib_paths' if you have a nonstandard boost installation.
 
 - `scons`
 
