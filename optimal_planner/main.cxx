@@ -82,7 +82,7 @@ float do_search( Search_Engine& engine, const STRIPS_Problem& plan_prob, float b
 
 	std::ofstream out( logfile.c_str() );
 	std::ofstream trace_out( tracefile.c_str() );
-  out << "Bound: "<< engine.bound() << std::endl;
+  // out << "Bound: "<< engine.bound() << std::endl;
 	engine.set_budget( budget );
 	engine.start();
   out << "Bound: "<< engine.bound() << std::endl;
