@@ -1,0 +1,8 @@
+[
+(UNSTACK ? A),
+(STACK D ?),
+~(CLEAR R) ^ (HANDEMPTY)~,
+(UNSTACK A C),
+~(ON D E) ^ (CLEAR O)~,
+~(ONTABLE E) ^ (HANDEMPTY)~
+]

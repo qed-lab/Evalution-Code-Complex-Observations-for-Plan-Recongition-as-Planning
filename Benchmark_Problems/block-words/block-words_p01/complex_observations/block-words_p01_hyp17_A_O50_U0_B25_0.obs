@@ -1,0 +1,5 @@
+[
+(UNSTACK ? P),
+(STACK R E),
+(PICK-UP O)
+]

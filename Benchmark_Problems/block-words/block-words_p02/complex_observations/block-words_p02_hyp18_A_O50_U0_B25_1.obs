@@ -1,0 +1,6 @@
+[
+(STACK S R),
+(UNSTACK A H),
+(STACK A ?),
+(STACK S A)
+]

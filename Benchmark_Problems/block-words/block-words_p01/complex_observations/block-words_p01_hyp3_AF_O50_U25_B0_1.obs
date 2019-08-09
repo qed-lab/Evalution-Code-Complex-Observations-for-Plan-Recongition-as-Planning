@@ -1,0 +1,10 @@
+[
+(UNSTACK D A),
+~(CLEAR W) ^ (CLEAR A))~,
+{
+(STACK A D),
+~(CLEAR C) ^ (CLEAR R)~
+},
+(PICK-UP W),
+(STACK W A)
+]

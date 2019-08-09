@@ -1,0 +1,8 @@
+[
+(UNSTACK M O),
+(STACK M E),
+~(CLEAR T) ^ (HANDEMPTY)~,
+(PICK-UP O),
+(UNSTACK T W),
+(STACK T O)
+]

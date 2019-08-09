@@ -1,0 +1,7 @@
+(PUT-DOWN R)
+(STACK M H)
+(PICK-UP E)
+(STACK W E)
+(PICK-UP O)
+(STACK O W)
+(STACK T O)

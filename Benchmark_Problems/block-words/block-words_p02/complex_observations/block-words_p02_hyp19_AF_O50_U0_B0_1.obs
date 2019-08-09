@@ -1,0 +1,8 @@
+[
+~(ON A H) ^ (CLEAR T)~,
+~(CLEAR K) ^ (HANDEMPTY)~,
+~(CLEAR K) ^ (ON A H)~,
+(STACK U R),
+~(ONTABLE T) ^ (ON U R))~,
+(STACK C U)
+]

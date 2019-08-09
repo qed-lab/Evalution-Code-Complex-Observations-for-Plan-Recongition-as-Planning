@@ -1,0 +1,14 @@
+[
+(UNSTACK S A),
+~(ON A H) ^ (ONTABLE T)~,
+(STACK S K),
+~(CLEAR H)) ^ (ONTABLE H)~,
+(PUT-DOWN A),
+(UNSTACK S K),
+(STACK S H),
+(STACK A S),
+~(ON S H) ^ (CLEAR T)~,
+~(ON S H) ^ (CLEAR C)~,
+~(HANDEMPTY) ^ (ONTABLE H)~,
+(STACK C R)
+]

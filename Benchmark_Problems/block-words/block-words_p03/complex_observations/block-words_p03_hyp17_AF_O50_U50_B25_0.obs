@@ -1,0 +1,12 @@
+[
+~(CLEAR E) ^ (CLEAR M)~,
+(STACK ? H),
+{
+~(HANDEMPTY) ^ (CLEAR R)~,
+(PUT-DOWN ?),
+~(ONTABLE T)) ^ (ON M O)~,
+~(CLEAR T) ^ (ON M O)~
+},
+~(ONTABLE H) ^ (ONTABLE O)~,
+~(CLEAR A) ^ (CLEAR E)~
+]

@@ -1,0 +1,4 @@
+(PUT-DOWN S)
+(UNSTACK A H)
+(PUT-DOWN A)
+(PICK-UP S)

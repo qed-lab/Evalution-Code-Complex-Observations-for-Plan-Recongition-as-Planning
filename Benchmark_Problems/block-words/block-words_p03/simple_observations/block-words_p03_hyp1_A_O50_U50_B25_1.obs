@@ -1,0 +1,4 @@
+(STACK H E)
+(PUT-DOWN M)
+(STACK T H)
+(STACK O T)

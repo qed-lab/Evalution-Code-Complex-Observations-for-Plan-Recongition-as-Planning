@@ -1,0 +1,8 @@
+[
+(PICK-UP O),
+{
+(STACK O W),
+~(ONTABLE E) ^ (HOLDING R)~
+},
+(STACK R ?)
+]

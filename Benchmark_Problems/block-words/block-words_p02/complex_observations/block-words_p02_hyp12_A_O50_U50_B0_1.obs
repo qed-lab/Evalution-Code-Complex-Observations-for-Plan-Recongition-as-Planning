@@ -1,0 +1,8 @@
+[
+(PICK-UP C),
+(STACK C K),
+{
+(PICK-UP U),
+(STACK R U)
+}
+]

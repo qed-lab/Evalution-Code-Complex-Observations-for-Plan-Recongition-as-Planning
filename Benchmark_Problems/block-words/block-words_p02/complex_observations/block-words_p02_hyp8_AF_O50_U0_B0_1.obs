@@ -1,0 +1,6 @@
+[
+~(ONTABLE H) ^ (ONTABLE T)~,
+~(ONTABLE K) ^ (ONTABLE T)~,
+(PICK-UP R),
+~(ONTABLE C) ^ (ONTABLE H)~
+]

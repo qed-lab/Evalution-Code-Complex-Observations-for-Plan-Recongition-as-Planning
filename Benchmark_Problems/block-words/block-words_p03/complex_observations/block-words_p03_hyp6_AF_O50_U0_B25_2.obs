@@ -1,0 +1,10 @@
+[
+~(CLEAR R) ^ (CLEAR W))~,
+(STACK T E),
+~(CLEAR M) ^ (ON R A)~,
+(UNSTACK M ?),
+~(CLEAR W) ^ (CLEAR M)~,
+(UNSTACK R A),
+~(ON M H) ^ (CLEAR A))~,
+(STACK ? O)
+]

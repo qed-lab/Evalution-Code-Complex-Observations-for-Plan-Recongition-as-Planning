@@ -1,0 +1,16 @@
+[
+(UNSTACK ? A),
+{
+~(CLEAR R) ^ (CLEAR O)~,
+~(CLEAR W) ^ (ON R P)~,
+(UNSTACK A ?)
+},
+~(CLEAR O) ^ (ONTABLE W)~,
+~(ONTABLE C) ^ (ONTABLE W)~,
+(STACK R O),
+(PICK-UP C),
+{
+~(ONTABLE P) ^ (ONTABLE D)~,
+(STACK C ?)
+}
+]

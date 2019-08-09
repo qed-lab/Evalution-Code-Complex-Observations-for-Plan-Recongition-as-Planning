@@ -1,0 +1,4 @@
+(STACK D O)
+(UNSTACK R P)
+(STACK R A)
+(STACK D R)

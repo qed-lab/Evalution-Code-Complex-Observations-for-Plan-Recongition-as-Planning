@@ -1,0 +1,10 @@
+[
+(UNSTACK M O),
+(PUT-DOWN ?),
+~(HANDEMPTY) ^ (CLEAR W)~,
+(PICK-UP O),
+(STACK O W),
+~(ON O W)) ^ (HANDEMPTY)~,
+(UNSTACK R ?),
+(STACK R O)
+]

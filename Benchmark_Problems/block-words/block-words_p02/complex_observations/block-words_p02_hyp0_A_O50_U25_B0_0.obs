@@ -1,0 +1,6 @@
+[
+(STACK S U),
+(STACK A R),
+(STACK T A),
+(UNSTACK S U)
+]

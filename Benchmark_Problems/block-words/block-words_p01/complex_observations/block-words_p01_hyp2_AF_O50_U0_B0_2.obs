@@ -1,0 +1,8 @@
+[
+(UNSTACK D A),
+(STACK D O),
+~(CLEAR E) ^ (CLEAR D)~,
+~(ON R P) ^ (CLEAR D)~,
+~(ON A W) ^ (CLEAR A)~,
+(STACK R A)
+]

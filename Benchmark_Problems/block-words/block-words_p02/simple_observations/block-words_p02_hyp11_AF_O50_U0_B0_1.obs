@@ -1,0 +1,5 @@
+(PUT-DOWN S)
+(STACK A T)
+(STACK S H)
+(STACK U S)
+(STACK R U)

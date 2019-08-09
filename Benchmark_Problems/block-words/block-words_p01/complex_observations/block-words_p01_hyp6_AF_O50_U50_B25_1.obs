@@ -1,0 +1,16 @@
+[
+{
+~(ON A C) ^ (CLEAR D)~,
+~(ONTABLE P) ^ (ONTABLE C)~,
+~(ONTABLE W) ^ (ONTABLE O)~
+},
+(STACK ? P),
+{
+(STACK A ?),
+~(ON A R)) ^ (ONTABLE R)~
+},
+~(CLEAR C) ^ (ONTABLE P)~,
+(STACK E ?),
+~(ON E A)) ^ (CLEAR W)~,
+~(CLEAR E) ^ (ON D P)~
+]

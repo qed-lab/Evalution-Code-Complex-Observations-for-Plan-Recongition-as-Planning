@@ -1,0 +1,18 @@
+[
+(UNSTACK S A),
+~(CLEAR R) ^ (HOLDING S)~,
+{
+(STACK S ?),
+(UNSTACK A H),
+(PUT-DOWN A)
+},
+~(CLEAR U) ^ (HANDEMPTY)~,
+(STACK S H),
+{
+~(CLEAR K) ^ (ONTABLE H)~,
+(PICK-UP R),
+(STACK ? A)
+},
+(PICK-UP ?),
+~(CLEAR C) ^ (CLEAR K)~
+]

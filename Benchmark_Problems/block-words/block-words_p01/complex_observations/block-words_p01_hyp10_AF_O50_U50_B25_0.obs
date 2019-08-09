@@ -1,0 +1,12 @@
+[
+(UNSTACK R P),
+{
+~(CLEAR E) ^ (CLEAR O)~,
+(STACK ? W),
+~(HANDEMPTY) ^ (CLEAR R)~,
+(PICK-UP ?)
+},
+~(ON A C) ^ (HOLDING P))~,
+(STACK O P),
+(UNSTACK D A)
+]

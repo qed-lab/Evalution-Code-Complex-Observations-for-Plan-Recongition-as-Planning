@@ -1,0 +1,11 @@
+[
+{
+(STACK M H),
+(PICK-UP E),
+(STACK E R),
+(PICK-UP ?)
+},
+(PICK-UP O),
+(PICK-UP T),
+(STACK T ?)
+]

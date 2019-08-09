@@ -1,0 +1,7 @@
+[
+{
+(PUT-DOWN R),
+(STACK ? R)
+},
+(PICK-UP H)
+]

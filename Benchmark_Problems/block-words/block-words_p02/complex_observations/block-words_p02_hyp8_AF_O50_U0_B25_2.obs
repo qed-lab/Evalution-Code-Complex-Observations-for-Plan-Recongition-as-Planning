@@ -1,0 +1,6 @@
+[
+~(HOLDING U)) ^ (ONTABLE K)~,
+(STACK ? T),
+~(ONTABLE T) ^ (CLEAR U)~,
+(STACK R U)
+]

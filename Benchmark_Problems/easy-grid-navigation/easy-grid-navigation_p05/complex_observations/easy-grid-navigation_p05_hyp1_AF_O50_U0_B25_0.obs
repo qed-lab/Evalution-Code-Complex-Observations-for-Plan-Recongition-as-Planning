@@ -1,0 +1,13 @@
+[
+(MOVE ? PLACE_9_6),
+~(AT PLACE_9_5))~,
+(MOVE PLACE_9_5 PLACE_9_4),
+~(AT PLACE_9_4))~,
+~(AT PLACE_9_3))~,
+~(AT PLACE_11_3))~,
+~(AT PLACE_12_3))~,
+(MOVE PLACE_12_3 PLACE_13_3),
+(MOVE PLACE_13_3 ?),
+~(AT PLACE_14_3))~,
+(MOVE ? PLACE_16_3)
+]

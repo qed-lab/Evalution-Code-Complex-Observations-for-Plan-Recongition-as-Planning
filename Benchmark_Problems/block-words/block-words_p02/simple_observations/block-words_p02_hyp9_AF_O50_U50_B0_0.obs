@@ -1,0 +1,4 @@
+(STACK S R)
+(UNSTACK S R)
+(STACK S H)
+(PICK-UP U)

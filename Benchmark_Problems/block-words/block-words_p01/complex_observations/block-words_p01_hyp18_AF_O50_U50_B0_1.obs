@@ -1,0 +1,10 @@
+[
+~(CLEAR W) ^ (CLEAR R)~,
+~(CLEAR O) ^ (CLEAR C))~,
+(STACK A D),
+{
+~(CLEAR O) ^ (ON A D))~,
+(PICK-UP W),
+~(ON R P) ^ (CLEAR C)~
+}
+]

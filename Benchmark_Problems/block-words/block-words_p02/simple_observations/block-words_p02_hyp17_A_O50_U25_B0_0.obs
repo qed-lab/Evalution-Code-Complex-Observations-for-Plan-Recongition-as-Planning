@@ -1,0 +1,4 @@
+(STACK C K)
+(UNSTACK A H)
+(PICK-UP H)
+(STACK H A)

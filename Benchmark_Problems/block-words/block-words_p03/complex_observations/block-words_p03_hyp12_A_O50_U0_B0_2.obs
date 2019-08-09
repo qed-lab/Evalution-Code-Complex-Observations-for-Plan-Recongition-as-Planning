@@ -1,0 +1,6 @@
+[
+(UNSTACK M O),
+(UNSTACK T W),
+(STACK O W),
+(STACK T O)
+]

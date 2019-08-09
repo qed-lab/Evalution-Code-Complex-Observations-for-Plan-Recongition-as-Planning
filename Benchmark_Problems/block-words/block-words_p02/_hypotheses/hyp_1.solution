@@ -1,0 +1,23 @@
+Bound: 3.40282e+38
+0 plan(s) found with best cost: 12
+1. (UNSTACK S A)
+2. (STACK S K)
+3. (UNSTACK A H)
+4. (PUT-DOWN A)
+5. (UNSTACK S K)
+6. (STACK S H)
+7. (PICK-UP A)
+8. (STACK A S)
+9. (PICK-UP R)
+10. (STACK R A)
+11. (PICK-UP T)
+12. (STACK T R)
+Best Time: 0
+Generated: 165224674
+Expanded: 165224686
+Total time: 0.823194
+Nodes generated during search: 52982
+Nodes expanded during search: 23883
+Nodes pruned by bound: 0
+Dead-end nodes: 0
+Nodes in OPEN replaced: 0

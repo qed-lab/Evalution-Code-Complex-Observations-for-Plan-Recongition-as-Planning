@@ -1,0 +1,7 @@
+[
+(UNSTACK ? O),
+{
+(PICK-UP O),
+(UNSTACK T W)
+}
+]

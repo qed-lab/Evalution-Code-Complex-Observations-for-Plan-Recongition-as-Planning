@@ -1,0 +1,3 @@
+(UNSTACK S A)
+(STACK S R)
+(UNSTACK S R)

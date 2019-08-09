@@ -1,0 +1,5 @@
+(PUT-DOWN R)
+(STACK D W)
+(UNSTACK A C)
+(PICK-UP E)
+(STACK E A)

@@ -1,0 +1,8 @@
+[
+(PICK-UP ?),
+~(ONTABLE H) ^ (CLEAR C)~,
+(STACK R T),
+~(CLEAR S) ^ (CLEAR U)~,
+~(ONTABLE H) ^ (ONTABLE K)~,
+(STACK C ?)
+]

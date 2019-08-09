@@ -1,0 +1,3 @@
+(UNSTACK R A)
+(PUT-DOWN R)
+(STACK E R)

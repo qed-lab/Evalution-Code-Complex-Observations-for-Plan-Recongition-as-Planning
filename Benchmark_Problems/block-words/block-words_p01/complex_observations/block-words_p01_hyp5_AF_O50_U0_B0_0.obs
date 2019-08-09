@@ -1,0 +1,6 @@
+[
+~(ONTABLE E) ^ (CLEAR R)~,
+(UNSTACK R P),
+~(ON O W) ^ (ON D A)~,
+(STACK R O)
+]

@@ -1,0 +1,6 @@
+[
+(STACK T E),
+(UNSTACK ? O),
+(STACK M H),
+(UNSTACK R A)
+]

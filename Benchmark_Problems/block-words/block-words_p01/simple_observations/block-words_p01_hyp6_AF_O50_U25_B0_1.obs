@@ -1,0 +1,4 @@
+(PUT-DOWN R)
+(STACK D P)
+(STACK E A)
+(STACK W E)

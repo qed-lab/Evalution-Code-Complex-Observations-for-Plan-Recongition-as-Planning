@@ -1,0 +1,6 @@
+[
+(PICK-UP O),
+~(HOLDING O)) ^ (CLEAR R)~,
+~(HANDEMPTY) ^ (ON O W))~,
+~(CLEAR P)) ^ (ON A C)~
+]

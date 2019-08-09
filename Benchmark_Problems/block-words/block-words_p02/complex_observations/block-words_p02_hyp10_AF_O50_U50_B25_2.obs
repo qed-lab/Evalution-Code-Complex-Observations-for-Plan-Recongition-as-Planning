@@ -1,0 +1,16 @@
+[
+(UNSTACK S A),
+{
+(PUT-DOWN ?),
+~(CLEAR R) ^ (ONTABLE K)~
+},
+(UNSTACK A H),
+{
+(PUT-DOWN A),
+~(ONTABLE H) ^ (CLEAR U)~,
+~(ONTABLE C) ^ (ONTABLE T)~
+},
+(PICK-UP ?),
+~(ONTABLE T) ^ (CLEAR C)~,
+(STACK R ?)
+]

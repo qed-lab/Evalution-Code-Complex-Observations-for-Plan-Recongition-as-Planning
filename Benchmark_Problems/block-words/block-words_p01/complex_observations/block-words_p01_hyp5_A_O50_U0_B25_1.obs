@@ -1,0 +1,4 @@
+[
+(UNSTACK R ?),
+(STACK R O)
+]

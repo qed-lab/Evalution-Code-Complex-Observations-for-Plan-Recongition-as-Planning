@@ -1,0 +1,10 @@
+[
+(STACK ? D),
+~(CLEAR O) ^ (ONTABLE O)~,
+(PICK-UP P),
+~(CLEAR E) ^ (ON D A)~,
+(STACK P E),
+(STACK O P),
+(UNSTACK R ?),
+(STACK R O)
+]

@@ -1,0 +1,8 @@
+[
+~(CLEAR K) ^ (ON A H)~,
+(STACK ? T),
+{
+~(CLEAR R) ^ (CLEAR K)~,
+~(ONTABLE T) ^ (CLEAR K)~
+}
+]

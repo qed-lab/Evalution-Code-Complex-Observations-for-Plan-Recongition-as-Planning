@@ -1,0 +1,10 @@
+[
+(STACK T E),
+(STACK O W),
+(UNSTACK R A),
+{
+(STACK R O),
+(PICK-UP H)
+},
+(STACK T H)
+]

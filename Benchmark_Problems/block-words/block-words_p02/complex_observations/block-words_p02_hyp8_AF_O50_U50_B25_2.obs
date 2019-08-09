@@ -1,0 +1,8 @@
+[
+(PICK-UP ?),
+(STACK U T),
+{
+~(CLEAR C) ^ (ONTABLE R)~,
+~(ON S A) ^ (HOLDING R))~
+}
+]

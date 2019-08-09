@@ -1,0 +1,8 @@
+[
+{
+(PUT-DOWN S),
+(UNSTACK ? H)
+},
+(STACK S H),
+(STACK A S)
+]

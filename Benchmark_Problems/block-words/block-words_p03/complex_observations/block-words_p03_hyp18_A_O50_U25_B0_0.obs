@@ -1,0 +1,9 @@
+[
+(UNSTACK T W),
+{
+(STACK T E),
+(STACK A W)
+},
+(UNSTACK T E),
+(STACK T H)
+]

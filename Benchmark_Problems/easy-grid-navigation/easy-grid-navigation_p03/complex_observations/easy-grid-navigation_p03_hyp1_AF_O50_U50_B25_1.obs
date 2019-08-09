@@ -1,0 +1,49 @@
+[
+(MOVE ? PLACE_2_8),
+~(AT PLACE_2_8))~,
+(MOVE ? PLACE_3_8),
+~(AT PLACE_3_8))~,
+{
+(MOVE PLACE_5_8 ?),
+~(AT PLACE_6_8))~,
+(MOVE PLACE_8_8 ?)
+},
+~(AT PLACE_9_8))~,
+(MOVE PLACE_9_8 PLACE_10_8),
+~(AT PLACE_10_8))~,
+~(AT PLACE_12_8))~,
+~(AT PLACE_14_8))~,
+{
+~(AT PLACE_15_8))~,
+~(AT PLACE_16_8))~,
+(MOVE ? PLACE_17_8)
+},
+(MOVE PLACE_19_8 PLACE_20_8),
+{
+~(AT PLACE_20_8))~,
+~(AT PLACE_20_7))~,
+(MOVE ? PLACE_20_6)
+},
+~(AT PLACE_20_5))~,
+{
+~(AT PLACE_20_4))~,
+~(AT PLACE_19_4))~,
+(MOVE PLACE_19_4 PLACE_18_4)
+},
+~(AT PLACE_17_4))~,
+(MOVE PLACE_16_4 ?),
+~(AT PLACE_15_4))~,
+{
+~(AT PLACE_14_4))~,
+(MOVE PLACE_14_4 ?),
+~(AT PLACE_13_4))~
+},
+(MOVE PLACE_13_4 PLACE_12_4),
+~(AT PLACE_12_4))~,
+{
+(MOVE PLACE_12_4 PLACE_11_4),
+~(AT PLACE_11_4))~,
+(MOVE ? PLACE_10_4)
+},
+(MOVE PLACE_10_4 PLACE_10_5)
+]

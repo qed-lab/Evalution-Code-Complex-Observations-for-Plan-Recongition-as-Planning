@@ -1,0 +1,12 @@
+[
+{
+(UNSTACK ? W),
+~(ON M E) ^ (ON R A)~,
+(STACK ? R),
+~(ONTABLE O) ^ (CLEAR T)~
+},
+~(ON R A) ^ (CLEAR M)~,
+(STACK O W),
+(UNSTACK M E),
+~(CLEAR O) ^ (ON R A)~
+]

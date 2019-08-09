@@ -1,0 +1,6 @@
+[
+(STACK O ?),
+~(HANDEMPTY) ^ (CLEAR R)~,
+(UNSTACK R P),
+~(CLEAR E) ^ (ON A C)~
+]

@@ -1,0 +1,6 @@
+[
+~(ON A H) ^ (ON S A)~,
+(STACK U T),
+~(ONTABLE T) ^ (ON A H)~,
+(PICK-UP ?)
+]

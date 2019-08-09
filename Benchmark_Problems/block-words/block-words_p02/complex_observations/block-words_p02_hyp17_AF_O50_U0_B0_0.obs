@@ -1,0 +1,10 @@
+[
+(STACK S T),
+~(ONTABLE K) ^ (CLEAR R)~,
+~(CLEAR C) ^ (ONTABLE K)~,
+(UNSTACK A H),
+(STACK A C),
+~(ON A C)) ^ (ONTABLE T)~,
+~(ON S T) ^ (ON A C)~,
+(STACK H A)
+]

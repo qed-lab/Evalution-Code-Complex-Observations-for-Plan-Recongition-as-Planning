@@ -1,0 +1,8 @@
+[
+(PICK-UP O),
+{
+~(CLEAR E) ^ (HOLDING O))~,
+~(ONTABLE E) ^ (CLEAR D)~
+},
+(STACK R O)
+]

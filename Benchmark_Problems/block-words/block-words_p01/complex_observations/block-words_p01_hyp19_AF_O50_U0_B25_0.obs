@@ -1,0 +1,10 @@
+[
+(UNSTACK D A),
+(PUT-DOWN ?),
+~(CLEAR A) ^ (CLEAR P))~,
+(PUT-DOWN ?),
+~(CLEAR D) ^ (ONTABLE O)~,
+~(CLEAR P) ^ (CLEAR E)~,
+(PICK-UP P),
+(STACK P A)
+]

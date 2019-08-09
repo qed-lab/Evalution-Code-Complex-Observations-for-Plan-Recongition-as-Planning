@@ -1,0 +1,12 @@
+[
+~(CLEAR E) ^ (CLEAR D)~,
+(STACK R W),
+(PICK-UP P),
+(STACK P E),
+{
+(STACK O P),
+~(CLEAR R) ^ (HANDEMPTY)~,
+~(CLEAR O) ^ (CLEAR R)~,
+(STACK D O)
+}
+]

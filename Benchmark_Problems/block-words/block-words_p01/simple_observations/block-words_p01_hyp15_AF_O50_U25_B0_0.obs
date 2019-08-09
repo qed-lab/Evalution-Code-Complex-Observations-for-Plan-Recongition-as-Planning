@@ -1,0 +1,5 @@
+(PICK-UP W)
+(STACK W E)
+(PICK-UP O)
+(PICK-UP C)
+(STACK C O)

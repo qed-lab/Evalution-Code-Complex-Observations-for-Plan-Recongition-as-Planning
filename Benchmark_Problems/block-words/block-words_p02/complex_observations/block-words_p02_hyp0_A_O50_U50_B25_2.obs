@@ -1,0 +1,8 @@
+[
+(UNSTACK S A),
+(STACK ? U),
+{
+(STACK A R),
+(UNSTACK S U)
+}
+]

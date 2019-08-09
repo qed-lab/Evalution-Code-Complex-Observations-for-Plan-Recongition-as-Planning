@@ -1,0 +1,4 @@
+(PICK-UP P)
+(PICK-UP O)
+(STACK O P)
+(STACK R O)

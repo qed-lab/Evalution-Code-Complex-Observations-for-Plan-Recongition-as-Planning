@@ -1,0 +1,10 @@
+[
+~(CLEAR D) ^ (ON D A)~,
+~(CLEAR R) ^ (CLEAR W)~,
+(STACK O R),
+{
+~(HANDEMPTY) ^ (ONTABLE E)~,
+(PICK-UP W)
+},
+~(HOLDING W)) ^ (ON A C)~
+]

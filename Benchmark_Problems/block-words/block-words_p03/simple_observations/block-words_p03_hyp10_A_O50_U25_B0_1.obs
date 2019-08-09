@@ -1,0 +1,4 @@
+(UNSTACK R A)
+(STACK R E)
+(PUT-DOWN T)
+(STACK W O)

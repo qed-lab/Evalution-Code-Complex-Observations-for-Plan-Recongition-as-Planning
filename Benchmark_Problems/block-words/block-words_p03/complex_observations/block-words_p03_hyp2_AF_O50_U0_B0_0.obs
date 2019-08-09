@@ -1,0 +1,8 @@
+[
+(PUT-DOWN R),
+(PICK-UP E),
+(STACK E R),
+~(ONTABLE H) ^ (HANDEMPTY)~,
+(PICK-UP H),
+~(ON E R) ^ (HOLDING H))~
+]

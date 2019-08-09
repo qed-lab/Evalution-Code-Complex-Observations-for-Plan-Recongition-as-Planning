@@ -1,0 +1,4 @@
+(PUT-DOWN M)
+(STACK T M)
+(PICK-UP O)
+(STACK R O)

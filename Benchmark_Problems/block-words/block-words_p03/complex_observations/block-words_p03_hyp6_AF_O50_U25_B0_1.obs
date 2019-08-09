@@ -1,0 +1,12 @@
+[
+~(CLEAR E) ^ (ONTABLE E)~,
+(STACK T E),
+{
+(UNSTACK M O),
+(STACK M H)
+},
+(PICK-UP O),
+~(CLEAR O) ^ (ONTABLE W)~,
+(UNSTACK R A),
+(STACK R O)
+]

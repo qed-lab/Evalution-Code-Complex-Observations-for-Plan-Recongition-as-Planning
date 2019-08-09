@@ -1,0 +1,10 @@
+[
+(PICK-UP ?),
+~(CLEAR S) ^ (CLEAR R)~,
+~(CLEAR R) ^ (CLEAR C)~,
+~(ONTABLE H) ^ (CLEAR C)~,
+(STACK U C),
+(PICK-UP ?),
+(PICK-UP T),
+~(CLEAR R)~
+]

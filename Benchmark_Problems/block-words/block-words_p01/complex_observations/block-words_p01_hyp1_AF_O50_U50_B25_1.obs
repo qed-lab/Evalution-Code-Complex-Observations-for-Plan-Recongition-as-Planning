@@ -1,0 +1,12 @@
+[
+(UNSTACK ? P),
+(PUT-DOWN ?),
+~(ON A C) ^ (CLEAR O)~,
+{
+(STACK D P),
+~(CLEAR W) ^ (HANDEMPTY)~,
+~(ONTABLE C) ^ (ONTABLE W)~,
+~(CLEAR D) ^ (HOLDING W))~
+},
+(STACK W A)
+]

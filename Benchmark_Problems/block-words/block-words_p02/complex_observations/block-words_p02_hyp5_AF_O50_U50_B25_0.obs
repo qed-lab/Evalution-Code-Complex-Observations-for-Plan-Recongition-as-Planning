@@ -1,0 +1,16 @@
+[
+~(ON A H) ^ (CLEAR R)~,
+(STACK ? T),
+(PUT-DOWN ?),
+{
+~(ON S T) ^ (CLEAR K)~,
+~(ONTABLE R) ^ (CLEAR H)~,
+(STACK ? H)
+},
+{
+~(CLEAR S) ^ (ONTABLE T)~,
+~(CLEAR K) ^ (ONTABLE C)~
+},
+~(HANDEMPTY) ^ (CLEAR A)~,
+~(CLEAR T) ^ (ONTABLE H)~
+]

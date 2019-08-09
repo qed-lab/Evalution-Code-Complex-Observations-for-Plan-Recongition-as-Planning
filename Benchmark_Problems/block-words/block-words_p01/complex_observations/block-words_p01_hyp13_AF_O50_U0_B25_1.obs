@@ -1,0 +1,12 @@
+[
+(PUT-DOWN ?),
+(PICK-UP E),
+~(CLEAR W) ^ (ON A C)~,
+(STACK E R),
+(STACK W ?),
+~(CLEAR W) ^ (ON E R)~,
+(PICK-UP O),
+(STACK O ?),
+~(ON E R) ^ (CLEAR O)~,
+~(HOLDING P))~
+]

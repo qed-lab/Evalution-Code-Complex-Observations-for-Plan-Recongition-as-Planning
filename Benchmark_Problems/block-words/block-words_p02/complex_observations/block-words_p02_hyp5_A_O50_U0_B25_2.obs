@@ -1,0 +1,7 @@
+[
+(UNSTACK S A),
+(STACK S T),
+(UNSTACK ? H),
+(PICK-UP ?),
+(STACK A S)
+]

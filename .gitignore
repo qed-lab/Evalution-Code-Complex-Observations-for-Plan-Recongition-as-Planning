@@ -15,8 +15,8 @@ __pycache__
 
 
 *.sol
-*_observations
-_hypotheses
+#*_observations
+#_hypotheses
 
 
 pr-domain.pddl
@@ -25,3 +25,7 @@ pr-problem.pddl
 *.object
 ff
 planner2
+ida_oneshot
+ida_star_planner/
+unopt_planner
+errors.log

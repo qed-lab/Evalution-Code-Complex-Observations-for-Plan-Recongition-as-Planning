@@ -1,0 +1,8 @@
+[
+~(ONTABLE P) ^ (ONTABLE C)~,
+(STACK ? O),
+~(CLEAR A) ^ (ON A C)~,
+(UNSTACK A C),
+~(CLEAR E) ^ (ONTABLE P)~,
+(STACK ? A)
+]

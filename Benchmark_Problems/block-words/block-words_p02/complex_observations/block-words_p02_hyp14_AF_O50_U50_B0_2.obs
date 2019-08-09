@@ -1,0 +1,10 @@
+[
+(PICK-UP C),
+{
+(STACK C K),
+~(ON A H) ^ (CLEAR T)~,
+(PICK-UP U)
+},
+~(CLEAR R) ^ (CLEAR U)~,
+(STACK T U)
+]

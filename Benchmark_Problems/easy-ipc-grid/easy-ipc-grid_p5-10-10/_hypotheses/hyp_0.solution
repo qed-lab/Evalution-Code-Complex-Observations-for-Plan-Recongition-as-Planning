@@ -1,0 +1,15 @@
+Bound: 3.40282e+38
+0 plan(s) found with best cost: 4
+1. (MOVE PLACE_0_0 PLACE_0_1)
+2. (MOVE PLACE_0_1 PLACE_0_2)
+3. (MOVE PLACE_0_2 PLACE_0_3)
+4. (MOVE PLACE_0_3 PLACE_0_4)
+Best Time: 0
+Generated: 260350178
+Expanded: 260350190
+Total time: 0.000267
+Nodes generated during search: 8
+Nodes expanded during search: 4
+Nodes pruned by bound: 0
+Dead-end nodes: 0
+Nodes in OPEN replaced: 0

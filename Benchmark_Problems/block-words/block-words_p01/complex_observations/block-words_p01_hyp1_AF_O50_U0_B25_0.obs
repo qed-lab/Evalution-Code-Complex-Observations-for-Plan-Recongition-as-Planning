@@ -1,0 +1,10 @@
+[
+(PUT-DOWN ?),
+~(CLEAR D) ^ (ON D A)~,
+~(CLEAR O) ^ (ONTABLE R)~,
+~(ONTABLE C) ^ (ONTABLE W)~,
+~(CLEAR E) ^ (ONTABLE R)~,
+(STACK ? R),
+~(CLEAR O) ^ (ON A R))~,
+(PICK-UP W)
+]

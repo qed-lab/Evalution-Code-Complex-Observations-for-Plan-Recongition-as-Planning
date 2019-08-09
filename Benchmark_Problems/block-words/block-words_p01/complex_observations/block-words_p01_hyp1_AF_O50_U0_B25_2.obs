@@ -1,0 +1,10 @@
+[
+(UNSTACK ? P),
+~(CLEAR D) ^ (HOLDING R)~,
+~(ONTABLE C) ^ (CLEAR E)~,
+~(CLEAR O) ^ (CLEAR P)~,
+(STACK D P),
+(UNSTACK A C),
+~(CLEAR C)) ^ (HOLDING A)~,
+(STACK A ?)
+]

@@ -1,0 +1,6 @@
+[
+(PICK-UP ?),
+(STACK O P),
+(UNSTACK D A),
+(STACK D O)
+]

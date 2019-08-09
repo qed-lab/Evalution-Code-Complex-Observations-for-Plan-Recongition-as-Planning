@@ -1,0 +1,12 @@
+[
+(UNSTACK ? A),
+~(ON A C) ^ (HANDEMPTY)~,
+(UNSTACK A C),
+~(CLEAR D) ^ (CLEAR E)~,
+{
+(UNSTACK R ?),
+~(CLEAR D) ^ (ON D O)~,
+(UNSTACK D O),
+(STACK D R)
+}
+]

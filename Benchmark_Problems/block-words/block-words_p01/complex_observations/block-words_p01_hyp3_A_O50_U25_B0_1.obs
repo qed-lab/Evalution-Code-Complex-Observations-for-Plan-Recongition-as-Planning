@@ -1,0 +1,5 @@
+[
+(PUT-DOWN D),
+(STACK A D),
+(STACK W A)
+]

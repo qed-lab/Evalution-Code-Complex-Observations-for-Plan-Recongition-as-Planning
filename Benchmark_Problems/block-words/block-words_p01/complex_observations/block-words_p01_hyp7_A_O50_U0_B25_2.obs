@@ -1,0 +1,6 @@
+[
+(PUT-DOWN ?),
+(STACK D W),
+(STACK A R),
+(STACK E A)
+]

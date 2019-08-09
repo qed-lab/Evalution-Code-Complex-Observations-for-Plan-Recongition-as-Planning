@@ -1,0 +1,10 @@
+[
+(UNSTACK R ?),
+{
+(PUT-DOWN R),
+(STACK E R),
+(PICK-UP H)
+},
+(UNSTACK T W),
+(PICK-UP ?)
+]

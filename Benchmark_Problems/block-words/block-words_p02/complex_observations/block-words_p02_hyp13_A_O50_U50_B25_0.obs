@@ -1,0 +1,7 @@
+[
+(PICK-UP ?),
+{
+(STACK U C),
+(STACK S U)
+}
+]

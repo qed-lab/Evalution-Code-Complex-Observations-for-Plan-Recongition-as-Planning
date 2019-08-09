@@ -1,0 +1,12 @@
+[
+~(ON R A) ^ (HOLDING T)~,
+~(CLEAR R) ^ (ON R A)~,
+~(ON T E) ^ (HOLDING R)~,
+(STACK R ?),
+(PICK-UP A),
+~(HANDEMPTY) ^ (CLEAR H)~,
+(PICK-UP ?),
+~(ON A W) ^ (ON R M)~,
+(STACK ? A),
+~(ON M O) ^ (HOLDING T)~
+]

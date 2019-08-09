@@ -1,0 +1,9 @@
+[
+(UNSTACK D A),
+{
+(STACK ? O),
+(PICK-UP ?),
+(STACK E A)
+},
+(PICK-UP P)
+]

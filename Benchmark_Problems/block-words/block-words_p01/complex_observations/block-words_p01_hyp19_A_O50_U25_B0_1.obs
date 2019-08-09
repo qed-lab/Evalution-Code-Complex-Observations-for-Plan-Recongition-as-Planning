@@ -1,0 +1,6 @@
+[
+(PUT-DOWN D),
+(UNSTACK R P),
+(PUT-DOWN R),
+(PICK-UP P)
+]

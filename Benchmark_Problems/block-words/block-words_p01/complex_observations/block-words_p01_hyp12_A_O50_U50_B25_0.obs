@@ -1,0 +1,7 @@
+[
+{
+(STACK R E),
+(PICK-UP W)
+},
+(STACK W ?)
+]

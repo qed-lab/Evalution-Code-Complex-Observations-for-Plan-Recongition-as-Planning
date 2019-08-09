@@ -1,0 +1,8 @@
+[
+(UNSTACK R A),
+(PUT-DOWN R),
+~(ON T W) ^ (ONTABLE A)~,
+(STACK E R),
+~(HANDEMPTY) ^ (ONTABLE R)~,
+~(ON E R) ^ (CLEAR T)~
+]

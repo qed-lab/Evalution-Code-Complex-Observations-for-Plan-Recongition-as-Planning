@@ -1,0 +1,16 @@
+[
+~(CLEAR M) ^ (CLEAR A))~,
+~(ONTABLE R)) ^ (CLEAR R)~,
+~(ON T W) ^ (ONTABLE A)~,
+(STACK M H),
+~(HANDEMPTY) ^ (CLEAR M)~,
+(UNSTACK T W),
+~(HOLDING T) ^ (CLEAR O)~,
+(PUT-DOWN T),
+~(ONTABLE E) ^ (CLEAR O)~,
+(PICK-UP E),
+~(ONTABLE R) ^ (CLEAR O)~,
+~(ONTABLE T) ^ (ON W E))~,
+~(CLEAR T) ^ (CLEAR A)~,
+(STACK O W)
+]

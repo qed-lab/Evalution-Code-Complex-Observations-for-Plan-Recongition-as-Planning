@@ -1,0 +1,8 @@
+[
+~(HOLDING R) ^ (ON A C)~,
+(STACK R E),
+(PICK-UP ?),
+(PICK-UP W),
+~(CLEAR O) ^ (ON R E)~,
+(STACK ? O)
+]

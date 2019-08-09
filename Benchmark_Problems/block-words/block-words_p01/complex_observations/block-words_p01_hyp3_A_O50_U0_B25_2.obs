@@ -1,0 +1,5 @@
+[
+(UNSTACK ? A),
+(UNSTACK A C),
+(STACK W A)
+]

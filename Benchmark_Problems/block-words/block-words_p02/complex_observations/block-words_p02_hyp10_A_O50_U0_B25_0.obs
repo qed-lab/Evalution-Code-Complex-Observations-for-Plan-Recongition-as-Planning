@@ -1,0 +1,7 @@
+[
+(UNSTACK S A),
+(PUT-DOWN ?),
+(PUT-DOWN A),
+(STACK ? S),
+(STACK R U)
+]

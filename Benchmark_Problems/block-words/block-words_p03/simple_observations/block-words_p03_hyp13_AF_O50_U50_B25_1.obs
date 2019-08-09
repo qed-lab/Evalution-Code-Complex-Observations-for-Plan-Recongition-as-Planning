@@ -1,0 +1,3 @@
+(PUT-DOWN M)
+(STACK T E)
+(UNSTACK T E)

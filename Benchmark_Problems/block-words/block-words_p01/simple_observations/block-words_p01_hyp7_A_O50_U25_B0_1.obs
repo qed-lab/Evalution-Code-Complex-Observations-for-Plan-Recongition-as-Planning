@@ -1,0 +1,4 @@
+(PUT-DOWN R)
+(STACK A R)
+(PICK-UP E)
+(STACK E A)

@@ -1,0 +1,16 @@
+[
+(UNSTACK D A),
+~(ONTABLE P) ^ (ONTABLE C)~,
+{
+~(ONTABLE E) ^ (ON A C)~,
+(PUT-DOWN R)
+},
+(UNSTACK A C),
+~(ONTABLE R) ^ (ON D O)~,
+~(ONTABLE R) ^ (ON D O)~,
+{
+(STACK E A),
+~(ON D O) ^ (ONTABLE R)~,
+(UNSTACK D O)
+}
+]

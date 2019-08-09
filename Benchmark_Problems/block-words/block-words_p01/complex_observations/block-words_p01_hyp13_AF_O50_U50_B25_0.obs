@@ -1,0 +1,16 @@
+[
+{
+(PUT-DOWN R),
+(STACK ? R)
+},
+~(ONTABLE C) ^ (ON D A)~,
+(PICK-UP ?),
+~(ONTABLE C) ^ (ONTABLE P)~,
+~(ONTABLE P) ^ (ONTABLE C)~,
+(PICK-UP O),
+{
+(PICK-UP ?),
+~(ON A C)~,
+(STACK P O)
+}
+]

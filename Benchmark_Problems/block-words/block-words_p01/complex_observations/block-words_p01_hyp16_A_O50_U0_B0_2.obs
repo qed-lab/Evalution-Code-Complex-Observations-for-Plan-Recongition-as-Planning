@@ -1,0 +1,7 @@
+[
+(UNSTACK D A),
+(UNSTACK R P),
+(STACK R E),
+(PUT-DOWN A),
+(STACK C O)
+]

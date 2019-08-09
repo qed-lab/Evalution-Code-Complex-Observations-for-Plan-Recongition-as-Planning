@@ -1,0 +1,3 @@
+(UNSTACK D A)
+(STACK D O)
+(UNSTACK D O)

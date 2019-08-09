@@ -1,0 +1,6 @@
+[
+(STACK R O),
+(PICK-UP E),
+(STACK E R),
+(PICK-UP H)
+]

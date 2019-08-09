@@ -1,0 +1,8 @@
+[
+(UNSTACK R A),
+(PUT-DOWN R),
+(PICK-UP E),
+(STACK E R),
+~(ON E R)) ^ (ONTABLE W)~,
+(PICK-UP H)
+]

@@ -1,0 +1,10 @@
+[
+(UNSTACK R ?),
+(STACK H E),
+{
+(UNSTACK ? O),
+(UNSTACK T W),
+(STACK T H)
+},
+(STACK O T)
+]

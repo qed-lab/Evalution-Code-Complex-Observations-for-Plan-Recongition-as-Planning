@@ -1,0 +1,12 @@
+[
+(STACK S T),
+~(CLEAR R) ^ (HANDEMPTY)~,
+(STACK ? K),
+(STACK S H),
+~(HANDEMPTY) ^ (CLEAR R)~,
+(UNSTACK A K),
+~(CLEAR R) ^ (HOLDING A)~,
+(STACK A ?),
+~(ONTABLE K) ^ (ON A S))~,
+(STACK ? A)
+]

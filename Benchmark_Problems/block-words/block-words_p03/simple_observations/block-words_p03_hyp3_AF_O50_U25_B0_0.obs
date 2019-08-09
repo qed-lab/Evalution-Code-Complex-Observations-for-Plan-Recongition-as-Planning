@@ -1,0 +1,4 @@
+(STACK R E)
+(STACK M T)
+(UNSTACK M T)
+(STACK M O)

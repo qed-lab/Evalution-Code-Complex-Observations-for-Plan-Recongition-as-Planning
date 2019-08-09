@@ -1,0 +1,10 @@
+[
+(UNSTACK D A),
+~(ON R P) ^ (ONTABLE E)~,
+~(ONTABLE W) ^ (ONTABLE C)~,
+{
+(STACK A W),
+~(CLEAR A) ^ (ONTABLE O)~,
+~(ONTABLE C) ^ (ONTABLE E)~
+}
+]

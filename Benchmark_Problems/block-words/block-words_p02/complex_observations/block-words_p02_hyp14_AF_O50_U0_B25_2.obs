@@ -1,0 +1,8 @@
+[
+~(ON S A) ^ (CLEAR R)~,
+(STACK C K),
+(STACK ? C),
+(PICK-UP ?),
+~(CLEAR R) ^ (CLEAR U)~,
+(STACK T U)
+]

@@ -1,0 +1,8 @@
+[
+(UNSTACK R ?),
+(STACK E R),
+(PUT-DOWN ?),
+(UNSTACK T W),
+(STACK T H),
+(STACK O T)
+]

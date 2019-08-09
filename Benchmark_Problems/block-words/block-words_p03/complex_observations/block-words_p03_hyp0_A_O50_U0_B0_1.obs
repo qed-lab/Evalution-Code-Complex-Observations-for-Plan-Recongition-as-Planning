@@ -1,0 +1,9 @@
+[
+(PUT-DOWN R),
+(PICK-UP E),
+(STACK E R),
+(PICK-UP H),
+(STACK T H),
+(PICK-UP M),
+(STACK M O)
+]

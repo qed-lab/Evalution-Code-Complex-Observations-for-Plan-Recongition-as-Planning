@@ -1,0 +1,7 @@
+[
+(UNSTACK ? A),
+{
+(STACK S T),
+(STACK U S)
+}
+]

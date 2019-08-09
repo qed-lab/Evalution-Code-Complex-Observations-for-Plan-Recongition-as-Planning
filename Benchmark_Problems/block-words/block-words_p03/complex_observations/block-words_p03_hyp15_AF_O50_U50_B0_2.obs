@@ -1,0 +1,10 @@
+[
+~(HANDEMPTY) ^ (ON M E))~,
+(PICK-UP O),
+~(ON R A) ^ (ON T W)~,
+{
+(STACK O M),
+~(HANDEMPTY) ^ (ON O M))~,
+(STACK H O)
+}
+]

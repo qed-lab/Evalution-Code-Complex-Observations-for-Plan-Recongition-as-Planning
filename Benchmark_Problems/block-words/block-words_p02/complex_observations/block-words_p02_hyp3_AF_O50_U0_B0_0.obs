@@ -1,0 +1,10 @@
+[
+~(ONTABLE T) ^ (CLEAR U)~,
+~(CLEAR R) ^ (ONTABLE S)~,
+~(CLEAR A) ^ (CLEAR R)~,
+(PICK-UP S),
+~(CLEAR T) ^ (ONTABLE R)~,
+(PICK-UP A),
+~(HOLDING A)) ^ (CLEAR S)~,
+(STACK A S)
+]

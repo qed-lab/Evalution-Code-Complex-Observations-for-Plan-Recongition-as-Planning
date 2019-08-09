@@ -1,0 +1,5 @@
+[
+(PUT-DOWN ?),
+(PICK-UP W),
+(STACK W A)
+]

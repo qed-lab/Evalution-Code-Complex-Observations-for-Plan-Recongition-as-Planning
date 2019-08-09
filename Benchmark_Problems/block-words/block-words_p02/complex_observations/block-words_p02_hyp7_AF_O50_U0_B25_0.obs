@@ -1,0 +1,6 @@
+[
+~(HOLDING U)) ^ (CLEAR R)~,
+~(ON U T)) ^ (ON S A)~,
+(PICK-UP C),
+(STACK ? U)
+]

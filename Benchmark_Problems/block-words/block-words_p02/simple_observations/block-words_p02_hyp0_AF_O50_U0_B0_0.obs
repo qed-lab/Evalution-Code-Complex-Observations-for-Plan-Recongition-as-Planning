@@ -1,0 +1,3 @@
+(UNSTACK A H)
+(STACK A R)
+(STACK T A)

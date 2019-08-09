@@ -1,0 +1,12 @@
+[
+~(CLEAR H) ^ (ONTABLE O)~,
+(STACK T ?),
+~(ONTABLE W) ^ (ONTABLE E)~,
+~(CLEAR A) ^ (ON A W))~,
+(PICK-UP ?),
+(STACK H ?),
+~(ON A W) ^ (ONTABLE E)~,
+(UNSTACK T E),
+~(ON H A) ^ (ON R M)~,
+(STACK T H)
+]

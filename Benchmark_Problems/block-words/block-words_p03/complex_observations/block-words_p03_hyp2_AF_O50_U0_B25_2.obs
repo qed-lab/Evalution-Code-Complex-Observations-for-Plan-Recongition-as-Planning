@@ -1,0 +1,8 @@
+[
+(UNSTACK R A),
+(PUT-DOWN ?),
+~(ON T W) ^ (ONTABLE A)~,
+~(ONTABLE R) ^ (ONTABLE W)~,
+~(ON M O) ^ (CLEAR A)~,
+(STACK H ?)
+]

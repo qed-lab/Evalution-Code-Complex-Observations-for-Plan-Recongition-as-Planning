@@ -1,0 +1,10 @@
+[
+(UNSTACK R A),
+~(CLEAR M) ^ (CLEAR E)~,
+(PUT-DOWN ?),
+{
+~(CLEAR H) ^ (ONTABLE R)~,
+~(ON T W) ^ (CLEAR A)~,
+(STACK ? E)
+}
+]

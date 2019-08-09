@@ -1,0 +1,6 @@
+[
+(PICK-UP O),
+~(ONTABLE C) ^ (HANDEMPTY)~,
+(UNSTACK R P),
+(STACK R O)
+]

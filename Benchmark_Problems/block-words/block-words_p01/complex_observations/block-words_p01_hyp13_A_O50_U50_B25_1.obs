@@ -1,0 +1,9 @@
+[
+(PUT-DOWN R),
+{
+(PICK-UP E),
+(PICK-UP ?),
+(PICK-UP ?)
+},
+(PICK-UP P)
+]

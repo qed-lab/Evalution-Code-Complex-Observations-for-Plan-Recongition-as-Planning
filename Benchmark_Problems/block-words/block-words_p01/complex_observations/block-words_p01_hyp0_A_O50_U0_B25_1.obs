@@ -1,0 +1,6 @@
+[
+(STACK D O),
+(STACK A W),
+(UNSTACK ? O),
+(STACK D R)
+]

@@ -1,0 +1,8 @@
+[
+{
+(STACK A W),
+(UNSTACK R P)
+},
+(STACK R A),
+(STACK D R)
+]

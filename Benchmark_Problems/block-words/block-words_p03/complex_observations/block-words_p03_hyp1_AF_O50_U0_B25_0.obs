@@ -1,0 +1,14 @@
+[
+(UNSTACK R ?),
+(PUT-DOWN R),
+~(HANDEMPTY) ^ (ON T W)~,
+(PICK-UP ?),
+~(ONTABLE H) ^ (ON T W)~,
+(PICK-UP H),
+~(ONTABLE R) ^ (ON T W)~,
+(UNSTACK M ?),
+~(CLEAR M) ^ (CLEAR O)~,
+~(ONTABLE W) ^ (HOLDING T)~,
+(PICK-UP O),
+~(CLEAR W) ^ (ON E R)~
+]

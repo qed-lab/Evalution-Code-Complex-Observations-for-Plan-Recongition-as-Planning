@@ -1,0 +1,4 @@
+(STACK D E)
+(UNSTACK A C)
+(PICK-UP W)
+(STACK W A)

@@ -1,0 +1,10 @@
+[
+{
+(UNSTACK ? A),
+~(CLEAR T) ^ (ON M O)~,
+(STACK R ?)
+},
+~(CLEAR T) ^ (ON M O)~,
+(STACK A R),
+~(HOLDING H)) ^ (ON M O)~
+]

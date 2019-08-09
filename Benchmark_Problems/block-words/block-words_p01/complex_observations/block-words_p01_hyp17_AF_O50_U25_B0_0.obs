@@ -1,0 +1,10 @@
+[
+(STACK R E),
+~(ONTABLE E) ^ (ON A C)~,
+(STACK O R),
+~(ON R E) ^ (HANDEMPTY)~,
+{
+~(ON R E) ^ (HOLDING P))~,
+(STACK P O)
+}
+]

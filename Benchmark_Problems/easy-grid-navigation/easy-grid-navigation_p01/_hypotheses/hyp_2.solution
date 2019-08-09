@@ -1,0 +1,20 @@
+Bound: 3.40282e+38
+0 plan(s) found with best cost: 9
+1. (MOVE PLACE_2_14 PLACE_2_13)
+2. (MOVE PLACE_2_13 PLACE_2_12)
+3. (MOVE PLACE_2_12 PLACE_3_12)
+4. (MOVE PLACE_3_12 PLACE_3_11)
+5. (MOVE PLACE_3_11 PLACE_3_10)
+6. (MOVE PLACE_3_10 PLACE_3_9)
+7. (MOVE PLACE_3_9 PLACE_3_8)
+8. (MOVE PLACE_3_8 PLACE_4_8)
+9. (MOVE PLACE_4_8 PLACE_5_8)
+Best Time: 4.1313e+17
+Generated: 5730530
+Expanded: 5730542
+Total time: 0.000696
+Nodes generated during search: 30
+Nodes expanded during search: 23
+Nodes pruned by bound: 0
+Dead-end nodes: 0
+Nodes in OPEN replaced: 0

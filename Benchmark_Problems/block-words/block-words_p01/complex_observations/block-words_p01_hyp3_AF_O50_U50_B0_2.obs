@@ -1,0 +1,10 @@
+[
+(UNSTACK D A),
+(PUT-DOWN D),
+{
+(UNSTACK A C),
+~(CLEAR C)) ^ (HOLDING A)~,
+(STACK A D)
+},
+(PICK-UP W)
+]

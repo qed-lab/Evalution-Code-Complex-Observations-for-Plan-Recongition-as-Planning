@@ -1,0 +1,8 @@
+[
+(UNSTACK R P),
+~(ONTABLE C) ^ (CLEAR E)~,
+(STACK ? E),
+~(ONTABLE P) ^ (CLEAR O)~,
+(PICK-UP ?),
+~(ONTABLE W) ^ (ON A C)~
+]

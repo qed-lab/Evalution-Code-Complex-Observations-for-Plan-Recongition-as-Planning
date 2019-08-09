@@ -1,0 +1,5 @@
+(PUT-DOWN R)
+(STACK O W)
+(PUT-DOWN A)
+(PICK-UP C)
+(STACK C O)

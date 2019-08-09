@@ -1,0 +1,20 @@
+[
+(PUT-DOWN R),
+~(CLEAR E) ^ (ONTABLE A)~,
+(UNSTACK T W),
+~(HOLDING T) ^ (ONTABLE W)~,
+(PUT-DOWN T),
+{
+~(CLEAR T) ^ (CLEAR W)~,
+~(ONTABLE W) ^ (CLEAR O)~,
+(STACK E R)
+},
+~(ONTABLE R) ^ (ON E R))~,
+{
+(PICK-UP W),
+(STACK O W),
+~(ONTABLE A) ^ (CLEAR O)~,
+(PICK-UP T)
+},
+~(CLEAR O) ^ (ONTABLE A)~
+]

@@ -1,0 +1,12 @@
+[
+(PUT-DOWN R),
+{
+~(ON D A) ^ (ONTABLE O)~,
+~(HANDEMPTY) ^ (ONTABLE P)~,
+~(ONTABLE O) ^ (ONTABLE C)~,
+(STACK A R)
+},
+~(ON D W) ^ (ONTABLE C)~,
+~(ON A R) ^ (ONTABLE C)~,
+(STACK E A)
+]

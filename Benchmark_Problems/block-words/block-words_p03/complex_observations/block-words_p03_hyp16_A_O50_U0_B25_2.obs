@@ -1,0 +1,5 @@
+[
+(STACK R E),
+(PICK-UP A),
+(STACK ? R)
+]

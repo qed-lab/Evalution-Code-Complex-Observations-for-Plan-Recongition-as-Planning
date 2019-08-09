@@ -1,0 +1,16 @@
+[
+{
+(STACK S R),
+~(CLEAR S) ^ (CLEAR K)~
+},
+(PICK-UP U),
+~(CLEAR A) ^ (CLEAR T)~,
+(STACK U T),
+(PICK-UP H),
+~(CLEAR A) ^ (ON U T)~,
+{
+~(CLEAR S) ^ (HANDEMPTY)~,
+~(CLEAR H) ^ (HOLDING S)~,
+(STACK S H)
+}
+]

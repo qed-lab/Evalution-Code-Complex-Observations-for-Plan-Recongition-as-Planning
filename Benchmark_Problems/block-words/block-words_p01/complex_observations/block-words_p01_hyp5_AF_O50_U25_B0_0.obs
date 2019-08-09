@@ -1,0 +1,6 @@
+[
+~(ONTABLE C) ^ (CLEAR D)~,
+(STACK O W),
+~(ONTABLE P) ^ (CLEAR E)~,
+~(ONTABLE P) ^ (ON D A)~
+]

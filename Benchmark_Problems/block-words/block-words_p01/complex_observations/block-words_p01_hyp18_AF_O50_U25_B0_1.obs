@@ -1,0 +1,10 @@
+[
+(UNSTACK D A),
+(STACK D E),
+~(HANDEMPTY) ^ (CLEAR A)~,
+(UNSTACK A C),
+{
+~(CLEAR A) ^ (CLEAR C)~,
+~(HOLDING W)) ^ (ON D E)~
+}
+]

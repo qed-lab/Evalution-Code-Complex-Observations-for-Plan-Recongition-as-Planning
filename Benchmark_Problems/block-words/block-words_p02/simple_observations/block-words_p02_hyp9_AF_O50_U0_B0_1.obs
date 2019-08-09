@@ -1,0 +1,6 @@
+(STACK S R)
+(UNSTACK A H)
+(STACK A C)
+(STACK S H)
+(STACK U S)
+(STACK T U)

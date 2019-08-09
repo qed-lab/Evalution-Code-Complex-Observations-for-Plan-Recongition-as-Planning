@@ -1,0 +1,10 @@
+[
+~(ON S A) ^ (ON A H)~,
+{
+(STACK C K),
+~(ONTABLE T) ^ (ON C K))~
+},
+~(HOLDING U)) ^ (ONTABLE H)~,
+~(ON C K) ^ (ON U C))~,
+(STACK T U)
+]

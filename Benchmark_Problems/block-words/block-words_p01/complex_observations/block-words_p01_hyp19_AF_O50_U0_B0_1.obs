@@ -1,0 +1,10 @@
+[
+(PUT-DOWN D),
+~(ON R P) ^ (ONTABLE C)~,
+(PUT-DOWN R),
+~(HOLDING A) ^ (ONTABLE P)~,
+~(HANDEMPTY) ^ (ONTABLE R)~,
+(PICK-UP P),
+~(ON A W) ^ (CLEAR D)~,
+(STACK P A)
+]

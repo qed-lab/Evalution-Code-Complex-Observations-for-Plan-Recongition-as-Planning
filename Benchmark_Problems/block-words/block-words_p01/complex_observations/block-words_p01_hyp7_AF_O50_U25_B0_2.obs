@@ -1,0 +1,12 @@
+[
+~(ONTABLE W) ^ (HOLDING R)~,
+(PUT-DOWN R),
+~(ONTABLE O) ^ (CLEAR W)~,
+(UNSTACK D A),
+~(ONTABLE E) ^ (CLEAR D)~,
+~(ONTABLE E) ^ (ONTABLE O)~,
+{
+(STACK A R),
+~(ON A R)) ^ (ONTABLE W)~
+}
+]
