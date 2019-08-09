@@ -662,7 +662,7 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
                     obs_hyp_sol = obs_f.replace(".obs", "_hyp{}.sol".format(hyp))
                     _, cost, time = run_planner("pr-domain.pddl", "pr-problem.pddl",obs_hyp_sol,bound=hyp_costs[hyp],timeout_seconds=PLAN_TIME_BOUND_FACTOR*optimal_hyp_times[hyp])
                     # Commented out for debugging, but should be uncommented eventually
-                    # os.system("rm -f {}".format(obs_hyp_sol))
+                    os.system("rm -f {}".format(obs_hyp_sol))
 
                     print("Hyp {}: cost {} (optimal {}), time {:.10f}".format(hyp, cost,hyp_costs[hyp], time))
 
