@@ -1046,6 +1046,12 @@ if __name__ == '__main__':
     if args.process:
         print("Processing results from domain '{}'.".format(args.domain))
         print("UNFINISHED")
+        results = get_object_from_file("Benchmark_Problems/" + args.domain + "/results.object")
+        for r in results.values():
+            if r.version != "ordered" and not r.is_correct:
+                print("NON-OPTIMAL PLANNER WARNING: \n\t" + str(r).replace("\n","\n\t"))
+        extracted = Extracted_Results(results)
+        print(extracted.format_results_blind())
     else:
         if args.problems is None:
             print("Running domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.domain, count_runs_domain("Benchmark_Problems/"+args.domain, settings, args.problems, max_ordered=args.max_ordered)))
