@@ -285,7 +285,7 @@ def run_planner(domain, problem, output_file='execution.details', trace_file=os.
     cmd = "./planner --domain {} --problem {} --output {} --trace_output {} ".format(domain, problem, output_file,
                                                                                      trace_file)
     if timeout_seconds is not None:
-        timeout_seconds = max(20, timeout_seconds)
+        timeout_seconds = max(30, timeout_seconds)
         cmd += " --time {} ".format(int(ceil(timeout_seconds)))
     else:
         cmd += " --time 100"
@@ -450,15 +450,26 @@ def write_observations_setting(folder, problemname, sett, hyp_solutions, hyp_tra
             for i in range(len(total_orders)):
                 obscure_blind.write_simple_obs_to_file(total_orders[i], ordered_folder + obs_f.replace(".obs", "/")+ obs_f.replace(".obs", "_ord{}.obs".format(i)))
 
+def make_giant_settings():
+    settings = []
+    for version in ["complex","simple"]:
+        for obs_idx in [0,1,2]:
+            for obsv_perc in [.25,.5,1]:
+                for unord_perc in [0,.5,1]:
+                    for garble_perc in [0,.25]:
+                        for mode in ["A","AF"]:
+                            settings.append(Setting(version,mode,obs_idx,obsv_perc,unord_perc,garble_perc))
+    return settings
+
 def make_settings():
     settings = []
     obsv_perc = .5
     for mode in ["A","AF"]:
         for obs_idx in (0,1,2):
-            for version in ["simple", "complex", "ordered"]:
+            for version in ["simple", "complex"]:
                 settings.append(Setting(version,mode,obs_idx,obsv_perc,.5,.25)) # Mixed
                 settings.append(Setting(version,mode,obs_idx,obsv_perc,.5,0)) # Vary unorderedness
-            for version in ["simple", "complex"]:
+                settings.append(Setting(version,mode,obs_idx,obsv_perc,.25,0)) # Vary unorderedness
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, .25))  # Vary garble
             settings.append(Setting("simple", mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
     return settings
@@ -1032,7 +1043,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
     parser.add_argument('domain', choices=['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'])
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
-    parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny"], help='What settings to evaluate on (defaults to a full evaluation)')
+    parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
     parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
     args = parser.parse_args()
@@ -1041,6 +1052,8 @@ if __name__ == '__main__':
         settings = make_small_settings()
     elif args.settings == "full":
         settings = make_settings()
+    elif args.settings == "giant":
+        settings = make_giant_settings()
     else:
         settings = make_tiny_settings()
     if args.process:
