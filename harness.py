@@ -265,11 +265,14 @@ def write_object_to_file(obj, filename):
         pickle.dump(obj, file)
 
 def get_object_from_file(filename):
-    with open(filename, 'rb') as file:
-        try:
-            return pickle.load(file)
-        except Exception:
-            return None
+    try:
+        with open(filename, 'rb') as file:
+            try:
+                return pickle.load(file)
+            except Exception:
+                return None
+    except Exception:
+        return None
 
 
 def run_planner(domain, problem, output_file='execution.details', trace_file=os.devnull, timeout_seconds=None,
@@ -468,8 +471,17 @@ def make_small_settings():
             for version in ["simple", "complex"]:
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, .5, .25))  # Mixed
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, .5, 0))  # Vary unorderedness
-            for version in ["simple", "complex"]:
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, .25))  # Vary garble
+            settings.append(Setting("simple", mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
+    return settings
+
+def make_tiny_settings():
+    settings = []
+    obsv_perc = .5
+    for mode in ["A", "AF"]:
+        for obs_idx in [0]:
+            for version in ["simple", "complex"]:
+                settings.append(Setting(version, mode, obs_idx, obsv_perc, .5, .25))  # Mixed
             settings.append(Setting("simple", mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
     return settings
 
@@ -641,7 +653,7 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
                     # Commented out for debugging, but should be uncommented eventually
                     # os.system("rm -f {}".format(obs_hyp_sol))
 
-                    print("Hyp {}: cost {}, time {:.10f}".format(hyp, cost, time))
+                    print("Hyp {}: cost {} (optimal {}), time {:.10f}".format(hyp, cost,hyp_costs[hyp], time))
 
                     obs_hyp_costs[hyp] = cost
                     hyp_times[hyp] = time
@@ -1007,11 +1019,11 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
 #                                         unord_percs=unord_percs, garble_percs=garble_percs,max_num_tot_orders=max_num_tot_orders)
 
 
-def run_domain(domain, settings):
+def run_domain(domain, settings, problemnames=None):
     """Assumes you've already got the observation files in place."""
     folder = "Benchmark_Problems/" + domain
 
-    evaluate_domain(folder, settings, result_file=folder + "/results.object")
+    evaluate_domain(folder, settings,problemnames, result_file=folder + "/results.object")
 
 
 
@@ -1019,18 +1031,24 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
     parser.add_argument('domain', choices=['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'])
-    parser.add_argument('--simple', action='store_true', help='Use simpler set of settings (defaults to a full evaluation)')
+    parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
+    parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
     parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
     args = parser.parse_args()
-
-    if args.simple:
+    print(args)
+    if args.settings == "simple":
         settings = make_small_settings()
-    else:
+    elif args.settings == "full":
         settings = make_settings()
+    else:
+        settings = make_tiny_settings()
     if args.process:
         print("Processing results from domain '{}'.".format(args.domain))
         print("UNFINISHED")
     else:
-        print("Running domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.domain, count_runs_domain("Benchmark_Problems/"+args.domain, settings, max_ordered=args.max_ordered)))
-        # run_domain(args.domain, settings)
+        if args.problems is None:
+            print("Running domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.domain, count_runs_domain("Benchmark_Problems/"+args.domain, settings, args.problems, max_ordered=args.max_ordered)))
+        else:
+            print("Running problems {} in domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.problems, args.domain,count_runs_domain("Benchmark_Problems/" + args.domain, settings, args.problems, max_ordered=args.max_ordered)))
+        run_domain(args.domain, settings, args.problems)
