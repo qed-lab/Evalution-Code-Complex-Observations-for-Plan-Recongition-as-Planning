@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <rp_heuristic.hxx>
 
 #include <aptk/open_list.hxx>
-#include "at_bfs_dq_tracer.hxx"
+#include "at_bfs_tracer.hxx"
 
 #include <iostream>
 #include <iterator>
@@ -56,8 +56,8 @@ using	aptk::agnostic::Relaxed_Plan_Heuristic;
 using 	aptk::search::Open_List;
 using	aptk::search::Node_Comparer;
 
-using 	aptk::search::bfs_dq::Node;
-using	aptk::search::bfs_dq::AT_BFS_DQ_SH_TRACER;
+using 	aptk::search::bfs_tracer::Node;
+using	aptk::search::bfs_tracer::AT_BFS_SQ_SH_TRACER;
 
 // MRJ: We start defining the type of nodes for our planner
 typedef		Node< aptk::State >						Search_Node;
@@ -75,7 +75,7 @@ typedef 	H1_Heuristic<Fwd_Search_Problem, H_Max_Evaluation_Function>	H_Max_Fwd; 
 typedef		Relaxed_Plan_Heuristic< Fwd_Search_Problem, H_Add_Fwd >		H_Add_Rp_Fwd;// Non-admissible :(
 
 // MRJ: Now we're ready to define the BFS algorithm we're going to use
-typedef		AT_BFS_DQ_SH_TRACER< Fwd_Search_Problem, H_Max_Fwd, BFS_Open_List >		Anytime_BFS_H_Add_Rp_Fwd;
+typedef		AT_BFS_SQ_SH_TRACER< Fwd_Search_Problem, H_Max_Fwd, BFS_Open_List >		Anytime_BFS_H_Add_Rp_Fwd;
 
 template <typename Search_Engine>
 float do_search( Search_Engine& engine, const STRIPS_Problem& plan_prob, float budget, std::string logfile, std::string tracefile ) {
@@ -85,6 +85,7 @@ float do_search( Search_Engine& engine, const STRIPS_Problem& plan_prob, float b
   out << "Bound: "<< engine.bound() << std::endl;
 	engine.set_budget( budget );
 	engine.start();
+  out << "Bound: "<< engine.bound() << std::endl;
 
   std::vector< aptk::Action_Idx > plan;
 	std::vector< aptk::State > trace;
@@ -247,7 +248,6 @@ int main( int argc, char** argv ) {
 	Fwd_Search_Problem	search_prob( &prob );
 
   Anytime_BFS_H_Add_Rp_Fwd bfs_engine( search_prob );
-	bfs_engine.set_schedule( 10, 1 );
   bfs_engine.set_bound(vm["bound"].as<float>());
 	float time = vm["time"].as<int>();
   std::string output_file = vm["output"].as<std::string>();
