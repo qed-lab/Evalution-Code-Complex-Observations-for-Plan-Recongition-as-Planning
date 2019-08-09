@@ -108,7 +108,7 @@ public:
 	AT_BFS_SQ_SH_TRACER( 	const Search_Model& search_problem )
 	: m_problem( search_problem ), m_heuristic_func(NULL),
 	m_exp_count(0), m_gen_count(0), m_pruned_B_count(0), m_dead_end_count(0), m_open_repl_count(0),
-	  m_B( infty ), m_time_budget(infty), m_greedy(true), m_delay_eval(false) {
+	  m_B( infty ), m_time_budget(infty), m_greedy(false), m_delay_eval(false) {
 		m_heuristic_func = new Abstract_Heuristic( search_problem );
 	}
 
