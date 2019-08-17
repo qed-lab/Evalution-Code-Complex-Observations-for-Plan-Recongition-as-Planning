@@ -14,6 +14,7 @@ DEVNULL = " > /dev/null"
 ERROR_LOG_FILE="errors.log"
 
 PLAN_TIME_BOUND_FACTOR = 10
+PLAN_TIME_LIMIT_MIN = 20
 
 class Results:
     def __init__(self, problem, true_hyp, mode, version, observed_perc, unordered_perc, garble_perc, obs_idx,
@@ -275,7 +276,7 @@ def get_object_from_file(filename):
         return None
 
 
-def run_planner(domain, problem, output_file='execution.details', trace_file=os.devnull, timeout_seconds=None,
+def run_planner(domain, problem, output_file='execution.details', trace_file=os.devnull, timeout_seconds=PLAN_TIME_LIMIT_MIN,
                 bound=None):
     if not os.path.exists(domain):
         print("Domain file <" + domain + "> does not exist.")
@@ -534,7 +535,7 @@ def count_runs_domains(folder, settings, domains=None, max_ordered=25):
     return count
 
 def evaluate_domain(folder, settings, problemnames=None, true_hyps=None, result_library=None, num_runs_total=None,
-                    num_runs_so_far=None, absolute_start_time=TIMER.time(), result_file=None):
+                    num_runs_so_far=None, absolute_start_time=TIMER.time(), result_file=None, time_limit=PLAN_TIME_LIMIT_MIN):
     if result_library is None and result_file is not None:
         result_tmp = get_object_from_file(result_file)
         if isinstance(result_tmp, dict):
@@ -549,12 +550,12 @@ def evaluate_domain(folder, settings, problemnames=None, true_hyps=None, result_
         num_runs_so_far = 0
 
     for problemname in problemnames:
-        _, num_runs_so_far = evaluate_problem(folder, settings, problemname, true_hyps, result_library, num_runs_total, num_runs_so_far, absolute_start_time, result_file)
+        _, num_runs_so_far = evaluate_problem(folder, settings, problemname, true_hyps, result_library, num_runs_total, num_runs_so_far, absolute_start_time, result_file, time_limit)
 
     return result_library, num_runs_so_far
 
 def evaluate_problem(folder, settings, problemname, true_hyps=None, result_library=None, num_runs_total=None,
-                     num_runs_so_far=None, absolute_start_time=TIMER.time(), result_file=None):
+                     num_runs_so_far=None, absolute_start_time=TIMER.time(), result_file=None, time_limit=PLAN_TIME_LIMIT_MIN):
     if result_library is None and result_file is not None:
         result_tmp = get_object_from_file(result_file)
         if isinstance(result_tmp, dict):
@@ -580,12 +581,12 @@ def evaluate_problem(folder, settings, problemname, true_hyps=None, result_libra
 
     for true_hyp in true_hyps:
         for setting in settings:
-            _, num_runs_so_far = evaluate_setting(folder, problemname, true_hyp, setting, hyp_costs, hyp_problems, hyps, optimal_hyp_times,result_library, num_runs_total, num_runs_so_far, absolute_start_time, result_file)
+            _, num_runs_so_far = evaluate_setting(folder, problemname, true_hyp, setting, hyp_costs, hyp_problems, hyps, optimal_hyp_times,result_library, num_runs_total, num_runs_so_far, absolute_start_time, result_file, time_limit)
     return result_library, num_runs_so_far
 
 def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problems, hyps, optimal_hyp_times,
                      result_library=None, num_runs_total=None, num_runs_so_far=None, absolute_start_time=TIMER.time(),
-                     result_file=None):
+                     result_file=None, time_limit=PLAN_TIME_LIMIT_MIN):
     if result_library is None and result_file is not None:
         result_tmp = get_object_from_file(result_file)
         if isinstance(result_tmp, dict):
@@ -664,7 +665,7 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
                         os.system(command)
 
                     obs_hyp_sol = obs_f.replace(".obs", "_hyp{}.sol".format(hyp))
-                    _, cost, time = run_planner(folder+"/pr-domain.pddl", folder+"/pr-problem.pddl",obs_hyp_sol,bound=hyp_costs[hyp],timeout_seconds=PLAN_TIME_BOUND_FACTOR*optimal_hyp_times[hyp])
+                    _, cost, time = run_planner(folder+"/pr-domain.pddl", folder+"/pr-problem.pddl",obs_hyp_sol,bound=hyp_costs[hyp],timeout_seconds= max(PLAN_TIME_BOUND_FACTOR*optimal_hyp_times[hyp], time_limit))
                     # Commented out for debugging, but should be uncommented eventually
                     os.system("rm -f {}".format(obs_hyp_sol))
 
@@ -1034,11 +1035,11 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
 #                                         unord_percs=unord_percs, garble_percs=garble_percs,max_num_tot_orders=max_num_tot_orders)
 
 
-def run_domain(domain, settings, problemnames=None):
+def run_domain(domain, settings, problemnames=None, time=PLAN_TIME_LIMIT_MIN):
     """Assumes you've already got the observation files in place."""
     folder = "Benchmark_Problems/" + domain
 
-    evaluate_domain(folder, settings,problemnames, result_file=folder + "/results.object")
+    evaluate_domain(folder, settings,problemnames, result_file=folder + "/results.object", time_limit=time)
 
 
 
@@ -1092,6 +1093,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
     parser.add_argument('domain', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
+    parser.add_argument('--time', default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN), nargs=1)
     parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
     parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
@@ -1119,4 +1121,4 @@ if __name__ == '__main__':
             print("Running domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.domain, count_runs_domain("Benchmark_Problems/"+args.domain, settings, args.problems, max_ordered=args.max_ordered)))
         else:
             print("Running problems {} in domain '{}', which will take {} runs. Results will be regularly updated to a 'results.object' in the domain's directory.".format(args.problems, args.domain,count_runs_domain("Benchmark_Problems/" + args.domain, settings, args.problems, max_ordered=args.max_ordered)))
-        run_domain(args.domain, settings, args.problems)
+        run_domain(args.domain, settings, args.problems, args.time)
