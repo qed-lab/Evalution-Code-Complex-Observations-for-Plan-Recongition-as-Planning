@@ -377,7 +377,7 @@ def write_observations_settings(settings, folder, problemname, max_num_tot_order
     template_f = basename + "template.pddl"
 
     hyp_costs, hyp_problems, hyp_solutions, hyp_traces, hyp_times, hyps = read_hypotheses_and_get_costs(basename,domain_f,hyps_f,template_f)
-    for setting in settings:
+    for setting in sorted(settings):
         write_observations_setting(folder,problemname,setting,hyp_solutions, hyp_traces, max_num_tot_orders)
 
 def write_observations_setting(folder, problemname, sett, hyp_solutions, hyp_traces, max_num_tot_orders=25):
@@ -1044,8 +1044,53 @@ def run_domain(domain, settings, problemnames=None):
 
 if __name__ == '__main__':
 
+
+    # results = get_object_from_file("Benchmark_Problems/block-words/big_results.object")
+    # extracted_results = Extracted_Results(results)
+    # print(extracted_results.overall_avg_time)
+    #
+    # giant_sett = make_giant_settings()
+    # norm_sett = make_settings()
+    # domains = ["Benchmark_Problems/easy-ipc-grid"]
+    # est_minutes = [1,1,1,1]
+    # print(min(minutes * count_runs_domain(domain, giant_sett)  for domain, minutes in zip(domains, est_minutes)))
+    # print(min(minutes * count_runs_domain(domain, norm_sett)  for domain, minutes in zip(domains, est_minutes)))
+
+    # settings = make_settings()
+    # write_observation_domain_settings(settings,"Benchmark_Problems/block-words")
+    # write_observation_domain_settings(settings,"Benchmark_Problems/easy-grid-navigation")
+    # write_observation_domain_settings(settings,"Benchmark_Problems/easy-ipc-grid")
+    # write_observation_domain_settings(settings,"Benchmark_Problems/logistics")
+
+    # basenames = ["Benchmark_Problems/block-words/block-words_p01/",
+    #              "Benchmark_Problems/block-words/block-words_p02/",
+    #              "Benchmark_Problems/block-words/block-words_p03/"]
+    # basenames += ["Benchmark_Problems/easy-grid-navigation/easy-grid-navigation_p01/",
+    #              "Benchmark_Problems/easy-grid-navigation/easy-grid-navigation_p02/",
+    #              "Benchmark_Problems/easy-grid-navigation/easy-grid-navigation_p03/",
+    #              "Benchmark_Problems/easy-grid-navigation/easy-grid-navigation_p04/",
+    #              "Benchmark_Problems/easy-grid-navigation/easy-grid-navigation_p05/"]
+    # basenames += ["Benchmark_Problems/easy-ipc-grid/easy-ipc-grid_p5-5-5/",
+    #              "Benchmark_Problems/easy-ipc-grid/easy-ipc-grid_p5-10-10/",
+    #              "Benchmark_Problems/easy-ipc-grid/easy-ipc-grid_p10-5-5/",
+    #              "Benchmark_Problems/easy-ipc-grid/easy-ipc-grid_p10-10-10/"]
+    # basenames += ["Benchmark_Problems/logistics/logistics_p01/",
+    #              "Benchmark_Problems/logistics/logistics_p02/",
+    #              "Benchmark_Problems/logistics/logistics_p03/"]
+    # for basename in basenames:
+    #     domain_f = basename+ "domain.pddl"
+    #     hyps_f = basename+ "hyps.dat"
+    #     template_f = basename+ "template.pddl"
+    #     og_hyp_costs, hyp_problems, hyp_solutions, hyp_traces, optimal_hyp_times, hyps = read_hypotheses_and_get_costs(basename, domain_f, hyps_f, template_f)
+    #     print(og_hyp_costs)
+    #     os.system("rm -r {}_hypotheses".format(basename))
+    #     new_hyp_costs, hyp_problems, hyp_solutions, hyp_traces, optimal_hyp_times, hyps = read_hypotheses_and_get_costs(basename, domain_f, hyps_f, template_f)
+    #     print(new_hyp_costs)
+    #     print([x-y for x,y in zip(og_hyp_costs,new_hyp_costs) ])
+
+    #
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
-    parser.add_argument('domain', choices=['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'])
+    parser.add_argument('domain', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
     parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
