@@ -1095,7 +1095,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
     parser.add_argument('domain', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
-    parser.add_argument('--time', type=float, default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN), nargs=1)
+    parser.add_argument('--time', type=float, default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN))
     parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
     parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
