@@ -666,6 +666,7 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
 
                     obs_hyp_sol = obs_f.replace(".obs", "_hyp{}.sol".format(hyp))
                     print(optimal_hyp_times[hyp])
+                    print(time_limit)
                     _, cost, time = run_planner(folder+"/pr-domain.pddl", folder+"/pr-problem.pddl",obs_hyp_sol,bound=hyp_costs[hyp],timeout_seconds= max( PLAN_TIME_BOUND_FACTOR*optimal_hyp_times[hyp], time_limit) )
                     # Commented out for debugging, but should be uncommented eventually
                     os.system("rm -f {}".format(obs_hyp_sol))
@@ -1094,7 +1095,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
     parser.add_argument('domain', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
-    parser.add_argument('--time', default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN), nargs=1)
+    parser.add_argument('--time', type=float, default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN), nargs=1)
     parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
     parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
