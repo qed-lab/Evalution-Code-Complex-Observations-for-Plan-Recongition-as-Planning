@@ -286,7 +286,7 @@ def run_planner(domain, problem, output_file='execution.details', trace_file=os.
     cmd = "./planner --domain {} --problem {} --output {} --trace_output {} ".format(domain, problem, output_file,
                                                                                      trace_file)
     if timeout_seconds is not None:
-        timeout_seconds = max(30, timeout_seconds)
+        timeout_seconds = max(PLAN_TIME_LIMIT_MIN, timeout_seconds)
         cmd += " --time {} ".format(int(ceil(timeout_seconds)))
     else:
         cmd += " --time 100"
@@ -665,7 +665,8 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
                         os.system(command)
 
                     obs_hyp_sol = obs_f.replace(".obs", "_hyp{}.sol".format(hyp))
-                    _, cost, time = run_planner(folder+"/pr-domain.pddl", folder+"/pr-problem.pddl",obs_hyp_sol,bound=hyp_costs[hyp],timeout_seconds= max(PLAN_TIME_BOUND_FACTOR*optimal_hyp_times[hyp], time_limit))
+                    print(optimal_hyp_times[hyp])
+                    _, cost, time = run_planner(folder+"/pr-domain.pddl", folder+"/pr-problem.pddl",obs_hyp_sol,bound=hyp_costs[hyp],timeout_seconds= max( PLAN_TIME_BOUND_FACTOR*optimal_hyp_times[hyp], time_limit) )
                     # Commented out for debugging, but should be uncommented eventually
                     os.system("rm -f {}".format(obs_hyp_sol))
 
