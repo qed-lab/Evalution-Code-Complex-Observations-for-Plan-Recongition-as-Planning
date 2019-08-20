@@ -1093,12 +1093,12 @@ if __name__ == '__main__':
 
     #
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
-    parser.add_argument('domain', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
+    parser.add_argument('domain', default='block-words', nargs='?', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
-    parser.add_argument('--time', type=float, default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN))
+    parser.add_argument('--time', type=float, default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN) )
     parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
-    parser.add_argument('--process', action='store_true', help='Process and report the results for this domain (Default is to evaluate)')
+    parser.add_argument('--process', default='USE_DOMAIN', nargs='?', help='Process and report the results for this domain, or a specified file (Evaluates if flag not present)')
     args = parser.parse_args()
     print(args)
     if args.settings == "simple":
@@ -1109,10 +1109,10 @@ if __name__ == '__main__':
         settings = make_giant_settings()
     else:
         settings = make_tiny_settings()
-    if args.process:
-        print("Processing results from domain '{}'.".format(args.domain))
-        print("UNFINISHED")
-        results = get_object_from_file("Benchmark_Problems/" + args.domain + "/results.object")
+    if args.process is not None:
+        result_file = "Benchmark_Problems/" + args.domain + "/results.object" if args.process == "USE_DOMAIN" else args.process
+        print("Processing results from '{}'.".format(result_file))
+        results = get_object_from_file(result_file)
         for r in results.values():
             if r.version != "ordered" and not r.is_correct:
                 print("NON-OPTIMAL PLANNER WARNING: \n\t" + str(r).replace("\n","\n\t"))
