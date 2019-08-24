@@ -29,3 +29,4 @@ ida_oneshot
 ida_star_planner/
 unopt_planner
 errors.log
+*.csv

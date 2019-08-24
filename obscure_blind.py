@@ -357,6 +357,8 @@ def write_simple_obs_to_file(obs_group, filename):
                 out.write(str(obs) + "\n")
         elif isinstance(obs_group, action_observation):
             out.write(str(obs_group))
+        elif obs_group is None:
+            out.write(" ")
         else:
             print("Not-simplified observation found in supposedly simplified group.")
             exit(1)
@@ -374,8 +376,8 @@ def write_ignore_all_uncertainty_to_file(obs_group, filename):
     if obs_group is not None:
         obs_group = obs_group.without_unordered_groups()
 
-    if obs_group is None:
-        return obs_group
+    # if obs_group is None:
+    #     return obs_group
 
 
     write_simple_obs_to_file(obs_group, filename)
@@ -393,8 +395,8 @@ def write_ignore_most_uncertainty_to_file(obs_group, filename):
     if obs_group is not None:
         obs_group = obs_group.reduce_unordered_groups()
 
-    if obs_group is None:
-        return obs_group
+    # if obs_group is None:
+    #     return obs_group
 
     write_simple_obs_to_file(obs_group, filename)
 
