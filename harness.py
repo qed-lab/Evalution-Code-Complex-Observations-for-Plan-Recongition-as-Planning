@@ -4,6 +4,7 @@ from collections import defaultdict
 import time as TIMER
 from sys import stdout
 import pickle
+import csv
 import random
 from math import ceil
 import argparse
@@ -270,10 +271,22 @@ def get_object_from_file(filename):
         with open(filename, 'rb') as file:
             try:
                 return pickle.load(file)
-            except Exception:
+            except Exception as ex:
                 return None
     except Exception:
         return None
+
+def write_results_CSV(filename, results):
+    with open(filename, 'w', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+        csv_writer.writerow(['problem', 'true_hyp', 'obs_idx', 'mode', 'version', 'observed_perc', 'unordered_perc', 'garble_perc',
+                 'obs_count', 'indicated', 'costs_of_hyps_with_obs', 'time', 'hyp_times', 'is_correct',
+                 'num_orderings_done', 'num_orderings_total'])
+        for r in results.values():
+            csv_writer.writerow([r.problem, r.true_hyp, r.obs_idx, r.mode, r.version, r.observed_perc, r.unordered_perc, r.garble_perc,
+                 r.obs_count, r.indicated, r.costs_of_hyps_with_obs, r.time, r.hyp_times, r.is_correct,
+                 r.num_orderings_done, r.num_orderings_total])
+
 
 
 def run_planner(domain, problem, output_file='execution.details', trace_file=os.devnull, timeout_seconds=PLAN_TIME_LIMIT_MIN,
@@ -1047,6 +1060,8 @@ def run_domain(domain, settings, problemnames=None, time=PLAN_TIME_LIMIT_MIN):
 
 if __name__ == '__main__':
 
+    # results = get_object_from_file("block-words-results.object")
+    # write_results_CSV("block-words-results.csv", results)
 
     # results = get_object_from_file("Benchmark_Problems/block-words/big_results.object")
     # extracted_results = Extracted_Results(results)
@@ -1098,7 +1113,7 @@ if __name__ == '__main__':
     parser.add_argument('--time', type=float, default=PLAN_TIME_LIMIT_MIN, help='Minimum time limit given to planning processes. Default {}'.format(PLAN_TIME_LIMIT_MIN) )
     parser.add_argument('--settings', default="full", choices=["full", "simple", "tiny", "giant"], help='What settings to evaluate on (defaults to a full evaluation)')
     parser.add_argument('--max_ordered', default=25, help="The maximum number of total-orders to sample, when evaluating the 'ordered' tactic. Defaults to 25. Will use less if not enough total-order observations available.")
-    parser.add_argument('--process', default='USE_DOMAIN', nargs='?', help='Process and report the results for this domain, or a specified file (Evaluates if flag not present)')
+    parser.add_argument('--process', const='USE_DOMAIN', nargs='?', help='Process and report the results for this domain, or a specified file (Evaluates if flag not present)')
     args = parser.parse_args()
     print(args)
     if args.settings == "simple":
