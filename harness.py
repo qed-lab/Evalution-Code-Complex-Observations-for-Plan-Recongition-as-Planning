@@ -664,6 +664,7 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
             continue
 
         obs_hyp_costs = {}
+        obs_count = 0
         hyp_times = {}
         indicated = []
         correct = False
