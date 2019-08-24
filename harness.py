@@ -13,6 +13,9 @@ DEVNULL = " > /dev/null"
 # DEVNULL = " "
 
 ERROR_LOG_FILE="errors.log"
+def log_error(message):
+    with open(ERROR_LOG_FILE, "a") as err_log:
+        err_log.write(message)
 
 PLAN_TIME_BOUND_FACTOR = 10
 PLAN_TIME_LIMIT_MIN = 20
@@ -40,11 +43,13 @@ class Results:
         self.num_orderings_total = num_orderings_total
 
         if self.version != "ordered" and not self.is_correct:
-            with open(ERROR_LOG_FILE, "a") as err_log:
-                err_log.write("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} did not indicate the correct hypothesis, but should've. This indicates a non-optimal planner.\n".format(**locals()))
+            log_error("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} did not indicate the correct hypothesis, but should've. This indicates a non-optimal planner.\n".format(**locals()))
+            # with open(ERROR_LOG_FILE, "a") as err_log:
+            #     err_log.write("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} did not indicate the correct hypothesis, but should've. This indicates a non-optimal planner.\n".format(**locals()))
         if self.version != "ordered" and self.num_orderings_total != 1:
-            with open(ERROR_LOG_FILE, "a") as err_log:
-                err_log.write("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} appears to have multiple orderings, though it shouldn't. This will cause bad numbers in result extraction.\n".format(**locals()))
+            log_error("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} appears to have multiple orderings, though it shouldn't. This will cause bad numbers in result extraction.\n".format(**locals()))
+            # with open(ERROR_LOG_FILE, "a") as err_log:
+            #     err_log.write("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} appears to have multiple orderings, though it shouldn't. This will cause bad numbers in result extraction.\n".format(**locals()))
 
     def __str__(self):
         identifiers = "Problem: {self.problem} hyp {self.true_hyp}\tVersion: {self.version}\tMode: {self.mode}\n" \
@@ -377,24 +382,24 @@ def read_ordering_info(filename):
         num_orders_kept = int(file.readline())
     return num_total_orders, num_orders_kept
 
-def write_observation_domain_settings(settings, folder, problemnames=None, max_num_tot_orders=25):
+def write_observation_domain_settings(settings, folder, problemnames=None, overwrite=False, max_num_tot_orders=25):
     if problemnames is None:
         problemnames = [d for d in os.listdir(folder) if os.path.isdir(os.path.join(folder, d))]
 
     for problemname in problemnames:
-        write_observations_settings(settings, folder,problemname, max_num_tot_orders)
+        write_observations_settings(settings, folder,problemname,overwrite, max_num_tot_orders)
 
-def write_observations_settings(settings, folder, problemname, max_num_tot_orders=25):
+def write_observations_settings(settings, folder, problemname, overwrite=False, max_num_tot_orders=25):
     basename = folder + "/" + problemname + "/"
     domain_f = basename + "domain.pddl"
     hyps_f = basename + "hyps.dat"
     template_f = basename + "template.pddl"
 
     hyp_costs, hyp_problems, hyp_solutions, hyp_traces, hyp_times, hyps = read_hypotheses_and_get_costs(basename,domain_f,hyps_f,template_f)
-    for setting in sorted(settings):
-        write_observations_setting(folder,problemname,setting,hyp_solutions, hyp_traces, max_num_tot_orders)
+    for setting in settings:
+        write_observations_setting(folder,problemname,setting,hyp_solutions, hyp_traces, overwrite, max_num_tot_orders)
 
-def write_observations_setting(folder, problemname, sett, hyp_solutions, hyp_traces, max_num_tot_orders=25):
+def write_observations_setting(folder, problemname, sett, hyp_solutions, hyp_traces, overwrite=False, max_num_tot_orders=25):
     basename = folder + "/" + problemname + "/"
     domain_f = basename + "domain.pddl"
     template_f = basename + "template.pddl"
@@ -431,6 +436,13 @@ def write_observations_setting(folder, problemname, sett, hyp_solutions, hyp_tra
         optimal_steps,_,_ = obscure_blind.read_plan_details(hyp_solutions[true_hyp])
         optimal_trace = obscure_blind.read_trace(hyp_traces[true_hyp])
 
+        if not overwrite :
+            the_folder = basename + sett.version + "_observations/"
+            if sett.version == "ordered": the_folder = ordered_folder
+            if os.path.exists(the_folder+obs_f):
+                print("Obs file {} exists, not overwriting.".format(the_folder+obs_f))
+                continue
+
         # Get the complex obs, or make if necessary
         if not os.path.exists(complex_folder + obs_f):
             if sett.mode == "A":
@@ -440,7 +452,7 @@ def write_observations_setting(folder, problemname, sett, hyp_solutions, hyp_tra
         observations = obscure_blind.read_complex_obs(complex_folder + obs_f)
 
         if sett.version == "complex":
-            pass
+            pass # Already done did it
         elif sett.version == "ignore":
             ignore_obs = obscure_blind.write_ignore_all_uncertainty_to_file(observations, ignore_folder + obs_f)
         elif sett.version == "simple":
@@ -691,14 +703,20 @@ def evaluate_setting(folder, problemname, true_hyp, sett, hyp_costs, hyp_problem
                     if cost == hyp_costs[hyp]:
                         print("Hypothesis {} indicated!".format(hyp))
                         indicated.append(hyp)
-
-            time = TIMER.time() - run_start_time
-            result_library[obs_f] = (Results(problemname,true_hyp,sett.mode,sett.version,sett.obsv_perc,sett.unord_perc,sett.garble_perc,sett.obs_idx,obs_count,indicated,obs_hyp_costs,time,hyp_times,len(obs_fs),num_orderings_total))
-            if result_file is not None:
-                write_object_to_file(result_library, result_file)
-            print("Time for {} problem {}: {:.10f}".format(sett.version, obs_f, time))
         else:
-            print(obs_f, "does not exist.")
+            print(obs_f, "does not exist. We assume this is an empty observation set.")
+            log_error("{} does not exist. We continue, assuming this is an empty observation set. If a bunch of this shows up in error log, you ran a bad test.".format(obs_f))
+            print("{} does not exist. We continue, assuming this is an empty observation set. If a bunch of this shows up in error log, you ran a bad test.".format(obs_f))
+            indicated = range(len(hyps))
+            obs_hyp_costs = hyp_costs.copy()
+            hyp_times = defaultdict(float)  # defaults to 0 because it is 0
+
+        time = TIMER.time() - run_start_time
+        result_library[obs_f] = (Results(problemname,true_hyp,sett.mode,sett.version,sett.obsv_perc,sett.unord_perc,sett.garble_perc,sett.obs_idx,obs_count,indicated,obs_hyp_costs,time,hyp_times,len(obs_fs),num_orderings_total))
+        if result_file is not None:
+            write_object_to_file(result_library, result_file)
+        print("Time for {} problem {}: {:.10f}".format(sett.version, obs_f, time))
+
     return result_library, num_runs_so_far
 
 """Old way of doing settings """
@@ -1106,7 +1124,7 @@ if __name__ == '__main__':
     #     print(new_hyp_costs)
     #     print([x-y for x,y in zip(og_hyp_costs,new_hyp_costs) ])
 
-    #
+
     parser = argparse.ArgumentParser(description="Evaluate a domain, or process the results from a run")
     parser.add_argument('domain', default='block-words', nargs='?', help="Choices: ['block-words', 'easy-grid-navigation', 'easy-ipc-grid', 'logistics'] ")
     parser.add_argument('--problems', default=None, help='Optionally choose problem(s) within the domain to evaluate.', nargs='*')
