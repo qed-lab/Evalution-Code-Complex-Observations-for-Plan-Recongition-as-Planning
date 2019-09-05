@@ -42,6 +42,7 @@ class Results:
         self.num_orderings_done = num_orderings_done
         self.num_orderings_total = num_orderings_total
 
+
         if self.version != "ordered" and not self.is_correct:
             log_error("Warning: {self.version} problem {self.problem} hyp{self.true_hyp} {self.mode} O{self.observed_perc:.0%} U{self.unordered_perc:.0%} B{self.garble_perc:.0%} idx{self.obs_idx} did not indicate the correct hypothesis, but should've. This indicates a non-optimal planner.\n".format(**locals()))
             # with open(ERROR_LOG_FILE, "a") as err_log:
@@ -63,6 +64,9 @@ class Results:
             identifiers += "\n\tThis problem tries {} of {} total-orderings\n".format(self.num_orderings_done,
                                                                                       self.num_orderings_total)
         return identifiers + "\n"
+
+    def set_obsf (self, obsf):
+        self.obsf = obsf
 
 
 class Extracted_Results:
@@ -497,7 +501,7 @@ def make_settings():
                 settings.append(Setting(version,mode,obs_idx,obsv_perc,.5,0)) # Vary unorderedness
                 settings.append(Setting(version,mode,obs_idx,obsv_perc,.25,0)) # Vary unorderedness
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, .25))  # Vary garble
-            settings.append(Setting("simple", mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
+                settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
     return settings
 
 def make_small_settings():
@@ -509,7 +513,7 @@ def make_small_settings():
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, .5, .25))  # Mixed
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, .5, 0))  # Vary unorderedness
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, .25))  # Vary garble
-            settings.append(Setting("simple", mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
+                settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
     return settings
 
 def make_tiny_settings():
@@ -519,7 +523,7 @@ def make_tiny_settings():
         for obs_idx in [0]:
             for version in ["simple", "complex"]:
                 settings.append(Setting(version, mode, obs_idx, obsv_perc, .5, .25))  # Mixed
-            settings.append(Setting("simple", mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
+                settings.append(Setting(version, mode, obs_idx, obsv_perc, 0, 0))  # Vary nothing
     return settings
 
 def count_runs(folder, settings, problemname, max_ordered=25, true_hyps=None):
