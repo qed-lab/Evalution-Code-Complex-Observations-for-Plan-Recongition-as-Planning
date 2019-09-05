@@ -15,9 +15,9 @@ to comment out the STATIC line in the Makefile, as some systems (including Mac) 
  same trouble in pr2plan_complex and LAPKT, so take notes of how you fix issues.
 
 ### pr2plan_complex
-See [here](https://github.com/qed-lab/Complex-Observation-Compiler) for download. Compile with 
+See the complex_observation_compiler folder. Compile with 
 `cd mod-metric-ff; make libff; cd ..; make all`. When compiled, copy the executable 'pr2plan' to this directory.
- _Please_ report bugs and compilation issues to its repository.
+ _Please_ report bugs and compilation issues to its repository [here](https://github.com/qed-lab/Complex-Observation-Compiler).
 
 ### Compiling the planner (with tracer)
  - Download [LAPKT](http://lapkt.org/index.php?title=Download), and set it up. (LAPKT should have resources. You'll need boost.) 
