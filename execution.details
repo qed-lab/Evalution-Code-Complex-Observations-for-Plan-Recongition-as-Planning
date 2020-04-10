@@ -1,0 +1,11 @@
+Plan found with cost: 3
+1. (ACTOR_MOVE_SUCC_L2_1_L2_2 )
+2. (MOVE_L3_3_L2_3 )
+3. (ACTOR_MOVE_FAIL_L2_2_L2_3 )
+Time: 0.000336
+Generated: 3
+Expanded: 4
+	Generated EHC: 3
+	Expanded EHC: 4
+	Generated GBFS: 0
+	Expanded GBFS: 0
