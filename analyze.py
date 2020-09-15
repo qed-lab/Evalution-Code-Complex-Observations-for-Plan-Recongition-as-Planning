@@ -1090,11 +1090,11 @@ if __name__ == '__main__':
     major_ticks = positions
     minor_ticks= [1.5, 4.5, 7.5, 10.5, 13.5]
     major_labels = ["Ign","Cpx","Ign", "Cpx","Ign","Cpx","Ign","Cpx","Ign","Cpx"]
-    ax2_minor_labels = ["\nn={}".format(len(base_case_bp[0])) + "\nU:0% D:0%",
-                        "\nn={}".format(len(vary_garble_bp[0])) + "\nU:0% D:25%",
-                        "\nn={}".format(len(vary_unord_little_bp[0])) + "\nU:25% D:0%",
-                        "\nn={}".format(len(vary_unord_lot_bp[0])) + "\nU:50% D:0%",
-                        "\nn={}".format(len(combo_bp[0])) + "\nU:50% D:25%"
+    ax2_minor_labels = ["\nn={}".format(len(base_case_bp[0])) + "\nU:0% B:0%",
+                        "\nn={}".format(len(vary_garble_bp[0])) + "\nU:0% B:25%",
+                        "\nn={}".format(len(vary_unord_little_bp[0])) + "\nU:25% B:0%",
+                        "\nn={}".format(len(vary_unord_lot_bp[0])) + "\nU:50% B:0%",
+                        "\nn={}".format(len(combo_bp[0])) + "\nU:50% B:25%"
                        ]
     ax1_minor_labels = ["n={}".format(len(base_case_bp[1])),
                         "n={}".format(len(vary_garble_bp[2])),
@@ -1192,11 +1192,11 @@ if __name__ == '__main__':
                     "n={}".format(len(A_time_vary_unord_lot[0])), "n={}".format(len(A_time_vary_unord_lot[1])), "n={}".format(len(A_time_vary_unord_lot[2])),
                     "n={}".format(len(A_time_combo[0])), "n={}".format(len(A_time_combo[1])), "n={}".format(len(A_time_combo[2]))]
 
-    minor_labels = ["U:0% D:0%",
-                    "U:0% D:25%",
-                    "U:25% D:0%",
-                    "U:50% D:0%",
-                    "U:50% D:25%"]
+    minor_labels = ["U:0% B:0%",
+                    "U:0% B:25%",
+                    "U:25% B:0%",
+                    "U:50% B:0%",
+                    "U:50% B:25%"]
 
     axA.grid(which='both', axis='y', linestyle='--',zorder=0, color='lightgrey')
     axAF.grid(which='both', axis='y', linestyle='--',zorder=0, color='lightgrey')
@@ -1308,11 +1308,11 @@ if __name__ == '__main__':
                       "n={}".format(len(A_time_combo[1]))
                      ]
 
-    minor_labels = ["U:0% D:0%",
-                    "U:0% D:25%",
-                    "U:25% D:0%",
-                    "U:50% D:0%",
-                    "U:50% D:25%"]
+    minor_labels = ["U:0% B:0%",
+                    "U:0% B:25%",
+                    "U:25% B:0%",
+                    "U:50% B:0%",
+                    "U:50% B:25%"]
 
     axA.grid(which='both', axis='y', linestyle='--', zorder=0, color='lightgrey')
     axAF.grid(which='both', axis='y', linestyle='--', zorder=0, color='lightgrey')
