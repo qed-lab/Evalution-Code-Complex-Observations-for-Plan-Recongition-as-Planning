@@ -20,7 +20,7 @@ See the complex_observation_compiler folder. Compile with
  _Please_ report bugs, questions, and compilation issues to its repository [here](https://github.com/qed-lab/Complex-Observation-Compiler).
 
 ### Compiling an optimal planner (with tracer)
-This evaluation uses a specially built optimal planner that produces a plan-trace. This plan trace was used to generate new complex observations. If you don't need to generate new observations and would like to use your own planner, replace the 'run_planner' function in harness.py with your own interface.
+This evaluation uses a specially built optimal planner that produces a plan trace. This plan trace was used to generate new complex observations. If you don't need to generate new observations and would like to use your own optimal planner, replace the 'run_planner' function in harness.py with your own interface.
  - Download [LAPKT](http://lapkt.org/index.php?title=Download), and set it up. (LAPKT should have resources. You'll need boost.)
     - Make sure to set up LAPKT's FF parser in 'external/libff', as in [these](http://lapkt.org/index.php?title=GettingStarted)
      instructions. If it has issues finding '/usr/include/<anything>' you may have to remove the explicit paths from the bottom. Regex in an IDE works best for this.
